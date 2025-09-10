@@ -2,6 +2,7 @@
 // Lab
 // COSC 1436 Fall 2025
 #include <iostream>
+// #include replace the line with the file
 
 int main()
 {
@@ -54,8 +55,73 @@ int main()
     bool ispassing;
     ispassing = true;
 
-    length = 100;
-    width = 100;
+    area = length * width;
+
+    length = width = 100;
+
+    //Airthmetic Operators
+    // arith_op ::= + | - | /
+    length = length + 10;
+    width = width - 20;
+
+
+
+    // int division ::= int / int produces an int, remainder is lost
+    int result = 10 / 3; // = 3
+
+    // modulos is remainder and only works  for integral types
+     int remainder = 10 % 3;  // = 1
+
+
+     int negativelength = -length;
+
+     // scope - lifetime of a variable
+     { //starting a new block 
+         int newVariable1 = 10;
+         double newVariable2 = 45.7;
+     }
+
+     {
+         char newVariable1 = 'A';
+     }
+
+     //std::cout << newVariable1;
+
+     // string C++
+     //Assign value using assignment operator
+     std::string studentName;
+     studentName = "Bob";
+
+     studentName = studentName + " Wilson";
+
+      // literal - great for static values
+     // variable -  great for writable values.
+     // Named constant - variable that has a constant value.
+
+     const double Pi = 3.14159;
+
+     //A = Pi * R2
+     double areaCircle = Pi * (radius * radius);
+
+     //another example
+
+     const int numberOfLabGrades = 5;
+     const int numberOfExamGrades = 4;
+
+
+    
+    //    int/int = int (integer division )
+    //     int + int = int 
+    //    double * double = double
+     
+
+
+    // breakpoints tells the debuger to execute.
+    // the yellow arrow represents the next instructions to next line.
+    // //breakpoints are only for debugging.
+    // local value allows you to look all the variables and value.
+    // to step you can use f1
+    
     // rather we can say length = width = 100;
 
         // variables are always used as noun
@@ -64,6 +130,8 @@ int main()
     // + means 1 or more
     // you cant have a identifier as a keywords
     // identifier must be unique no repeatation
+
+    //camel casing are all lowercase, capitalise on word boundaries.
 
 
 
