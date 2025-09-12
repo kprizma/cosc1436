@@ -109,6 +109,10 @@ int main()
      const int numberOfExamGrades = 4;
 
 
+     //CONSTANT WRITE TO A CONSTANT
+     //PI = 140;
+
+
     
     //    int/int = int (integer division )
     //     int + int = int 
