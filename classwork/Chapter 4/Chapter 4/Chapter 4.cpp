@@ -7,7 +7,40 @@
 #include <iomanip>
 
 int main()
+
 {
+    // Demo prefix/ postfix-increment/ decrement
+   /* std::cout << "Enter a value: ";
+    int number;
+    std::cin >> number;
+    
+    std::cout << "Prefix (++X) = " << ++number << ", x = " << number << std::endl;
+    std::cout << "Prefix (--X) = " << --number << ", x = " << number << std::endl;
+    std::cout << "Prefix (X++) = " << ++number++ << ", x = " << number << std::endl;
+    std::cout << "Prefix (X--) = " << ++number-- << ", x = " << number << std::endl;
+    */
+
+
+    //Display main menu
+    bool done = false;
+    while (!done)
+    {
+        std::cout << "Movie Library" << std::endl;
+        std::cout << "-------------" << std::endl;
+        std::cout << "A)dd Movie" << std::endl;
+        std::cout << "V)iew Movie" << std::endl;
+        std::cout << "E)dit Movie" << std::endl;
+        std::cout << "D)elete Movie" << std::endl;
+        std::cout << "Q)uit" << std::endl;
+
+        char choice;
+        std::cin >> choice;
+
+     
+    }
+
+
+ 
 
 
     // Movie Details
@@ -20,6 +53,7 @@ int main()
 
     // get movie details
     std::cout << "Enter movie title: ";
+    std::cin.ignore();
     std::getline(std::cin, title);
 
     //TITLE IS REQUIRED
@@ -27,19 +61,30 @@ int main()
     if (isEmpty)
         std::cout << "Title is required" << std::endl;
 
-    std::cout << "Enter the run length (in minute): ";
-    std::cin >> runLength;
-    if (runLength < 0);
+    std::cout << "Enter the run length (in minutes): ";
+    /*runLength = -1;
+    while (runLength < 0);
     {
+        std::cin >> runLength;
+        if (runLength < 0);
+        std::cout << "ERROR: Run length must be at least 0" << std::endl;
+        
+    }*/
 
-        std::cout << "Run length must be at least 0" << std::endl;
-        runLength = 0;
-    };
+    std::cin >> runLength;
+    while (runLength < 0)
+    {
+        //Error
+        std::string message = "Run length must be at least 0";
+        std::cout << "ERROR: " << message << std::endl;
+        std::cin >> runLength;
+
+    }
 
     std::cout << "Enter the release year (1900-2100): ";
     std::cin >> releaseYear;
 
-    if (releaseYear < 1900)
+    if (releaseYear < 1900 || releaseYear > 2100)
     {
         std::cout << " Release year must be at least 1900" << std::endl;
         releaseYear = 1900;
