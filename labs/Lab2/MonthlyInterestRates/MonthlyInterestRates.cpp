@@ -3,8 +3,10 @@
 // COSC 1436 - Fall 2025
 
 #include <iostream>
-#include<iomanip>
-using namespace std;
+#include <string>
+#include <cmath>
+#include <iomanip>
+
 void main()
 {
     std::cout << "Lab 2" << std::endl;
@@ -18,23 +20,23 @@ void main()
 
     while (loanAmount < 1 || loanAmount > 1000)
     {
-        std::cout << "This is an invalid value." << std::endl;
-        std::cout << "Please enter the loan amount ($1 - $1000): ";
+        std::cout << "ERROR: Loan amount must be between $1 - $1000." << std::endl;
+        std::cout << "Please enter the loan amount: ";
         std::cin >> loanAmount;
     }
 
     // prompting the user for the interest rate.
-    double interestRatePercent = 0;
+    double interestRatePercent = 0.0;
     std::cout << "Please enter the interest rate (%): ";
     std::cin >> interestRatePercent;
 
     while (interestRatePercent < 1.0 || interestRatePercent > 100.0)
     {
-        std::cout << "This is an invalid value." << std::endl;
-        std::cout << "Please enter the interest rate (1.0% - 100.0%): ";
+        std::cout << "ERROR: Interst rate must be between 1.0% - 100.0%." << std::endl;
+        std::cout << "Please enter the interest rate (%): ";
         std::cin >> interestRatePercent;
     }
-    double interestRate = interestRatePercent / 100.0;
+   double  interestRatePercent = interestRatePercent / 100.0;
 
     //
 
