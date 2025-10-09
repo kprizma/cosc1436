@@ -5,25 +5,52 @@
 #include <iostream>
 #include <string>
 #include <iomanip>
+    
+// movie details
+struct Movie
+{
+    // Movie Details
+    std::string title;            //Required
+    std::string description;       // optional
+    int runLength;                 // required
+    int releaseYear;               // optional , but between 1900 - 2100
+ // double userRating;              // optional, 1.0 - 10.0
+    bool isClassic;                   // Required, false
+    std::string genres               // optional ( comma separated list of genres)
+
+};
 
 int main()
 
 {
     // Demo prefix/ postfix-increment/ decrement
-   /* std::cout << "Enter a value: ";
-    int number;
-    std::cin >> number;
-    
-    std::cout << "Prefix (++X) = " << ++number << ", x = " << number << std::endl;
-    std::cout << "Prefix (--X) = " << --number << ", x = " << number << std::endl;
-    std::cout << "Prefix (X++) = " << ++number++ << ", x = " << number << std::endl;
-    std::cout << "Prefix (X--) = " << ++number-- << ", x = " << number << std::endl;
+  
+    // demo nested loop 10*12 = 120
+    //     1 2 3 4 5 
+    //   1 1 2 3 4 5
+    //   2 2 4 6 8 10
+    //   3 3 6 9 12 15
+
+ /* for (int rows = 1; rows <= 12; ++rows)
+    {
+        
+        for (int cols = 1; cols <=10; ++cols)
+        {
+            if (cols != 0)
+                std::cout << std::setw(4) << (rows * cols);
+            else
+                std::cout << cols;
+        }
+
+        std::cout << std::endl;
+       
+    }
     */
 
 
-    //Display main menu
+
     bool done = false;
-    while (!done)
+    do //while (!done)
     {
         std::cout << "Movie Library" << std::endl;
         std::cout << "-------------" << std::endl;
@@ -36,30 +63,30 @@ int main()
         char choice;
         std::cin >> choice;
 
+        switch (choice) { ... }
+    } while (!done);
+    
      
-    }
+    // int id;
+    Movie movie = {0};
 
 
  
 
 
-    // Movie Details
-    std::string title;            //Required
-    std::string description;       // optional
-    int runLength;                 // required
-    int releaseYear;               // optional , but between 1900 - 2100
-    double userRating;              // optional, 1.0 - 10.0
-    bool isClassic;                   // Required, false
-
+    
     // get movie details
     std::cout << "Enter movie title: ";
     std::cin.ignore();
-    std::getline(std::cin, title);
+    std::getline(std::cin, movie.title);
 
-    //TITLE IS REQUIRED
-    bool isEmpty = title == "";
-    if (isEmpty)
+    //...
+    while (movie.title == "")
+
+    {
         std::cout << "Title is required" << std::endl;
+        std::getline(std::cin, movie.title);
+    }
 
     std::cout << "Enter the run length (in minutes): ";
     /*runLength = -1;
@@ -82,7 +109,7 @@ int main()
     }
 
     std::cout << "Enter the release year (1900-2100): ";
-    std::cin >> releaseYear;
+    std::cin >> movie.releaseYear;
 
     if (releaseYear < 1900 || releaseYear > 2100)
     {
