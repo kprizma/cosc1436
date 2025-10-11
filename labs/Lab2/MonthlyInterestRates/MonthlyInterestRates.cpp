@@ -15,30 +15,40 @@ void main()
 
     // prompting the user for the initial loan.
     int loanAmount = 0;
-    std::cout << "Please enter the loan amount: ";
+    std::cout << "Please enter the loan amount ($1 - $1000): ";
     std::cin >> loanAmount;
 
     while (loanAmount < 1 || loanAmount > 1000)
     {
-        std::cout << "ERROR: Loan amount must be between $1 - $1000." << std::endl;
-        std::cout << "Please enter the loan amount: ";
+        std::cout << "That is an invalid value." << std::endl;
+        std::cout << "Please enter the loan amount ($1 - $1000): ";
         std::cin >> loanAmount;
     }
 
     // prompting the user for the interest rate.
-    double interestRatePercent = 0.0;
-    std::cout << "Please enter the interest rate (%): ";
-    std::cin >> interestRatePercent;
+    double interestRate = 0.0;
+    std::cout << "Please enter the interest rate (1.0% - 100.0%): ";
+    std::cin >> interestRate;
 
-    while (interestRatePercent < 1.0 || interestRatePercent > 100.0)
+    while (interestRate < 1.0 || interestRate > 100.0)
     {
-        std::cout << "ERROR: Interst rate must be between 1.0% - 100.0%." << std::endl;
-        std::cout << "Please enter the interest rate (%): ";
-        std::cin >> interestRatePercent;
+        std::cout << "That is an invalid value." << std::endl;
+        std::cout << "Please enter the interest rate (1.0% - 100.0%): ";
+        std::cin >> interestRate ;
     }
-   double  interestRatePercent = interestRatePercent / 100.0;
+   double nterestRate = interestRate / 100.0;
 
-    //
+    //prompting for payment amount
+   double monthlyPayment = 0.0;
+   std::cout << " How much do you want to pay each month?" ;
+   std::cin >> monthlyPayment;
+   
+   while (monthlyPayment < 0 || monthlyPayment > loanAmount)
+   {
+       std::cout << " This is an invalid value. " << std::endl;
+       std::cout << " How much do you want to pay each month? ";
+       std::cin >> monthlyPayment;
+   }
 
     
 }
