@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 #include <iomanip>
-    
+  
 // movie details
 struct Movie
 {
@@ -18,15 +18,69 @@ struct Movie
 };
 
 
+/// <summary>Defines possible foreground colors.</summary>
+enum class ForegroundColor {
+    Black = 30,
+    Red = 31,
+    Green = 32,
+    Yellow = 33,
+    Cyan = 36,
+    BrightRed = 91,
+    BrightGreen = 92,
+    BrightYellow = 93,
+    BrightCyan = 96
+};
+
+
+
+
+void ResetTextColor()
+{
+    std::cout << "\033[0m";
+}
+
+
+
+void SetTextColor (ForegroundColor color)
+{
+    std::cout << "\033[" << (int)color << "m";
+}
+
+
+// <summary> displays an error message. </summary>
+// <param name = "message"> message to display. </param>
+void DisplayError(std::string message)
+{
+    
+  //  std::cout << "\033[91m"
+    SetTextColor(ForegroundColor::BrightRed);
+    std::cout << "Error: " << message << std::endl;
+    ResetTextColor();
+}
+// <summary> displays an error message. </summary>
+// <param name = "message"> message to display. </param>
+void DisplayWarning(std::string message)
+{
+    SetTextColor(ForegroundColor::BrightYellow);
+    std::cout << message << std::endl;
+    ResetTextColor();
+}
+
+
 /// <summary> view details of a movie. </summary>
 /// <remarks>
 /// more details including paragraphs of data if you want.
 /// </remarks>
 
 
-void ViewMovie()
+
+
+// function is a forms of task which is reusable block of code.    reusability , maintainability , performance , encupsulation
+
+
+void ViewMovie(Movie movie)
 {
-    Movie movie;
+    
 
     std::cout << std::fixed << std::setprecision(1) << std::endl;
     std::cout << movie.title << " (" << movie.releaseYear << ")" << std::endl;
@@ -50,7 +104,7 @@ void AddMovie()
     //Title is required
     while (movie.title == "")
     {
-        std::cout << "Title is required" << std::endl;
+        DisplayError("Title is required ");
         std::getline(std::cin, movie.title);
     }
 
@@ -61,17 +115,14 @@ void AddMovie()
 
         //Error
         if (movie.runLength < 0)
-        {
-            std::string message = "Run length must be at least 0";
-            std::cout << "ERROR: " << message << std::endl;
-        }
+            DisplayError("Run length must be at least 0");
     } while (movie.runLength < 0);
 
     std::cout << "Enter the release year (1900-2100): ";
     std::cin >> movie.releaseYear;
     while (movie.releaseYear < 1900 || movie.releaseYear > 2100)
     {
-        std::cout << "Release year must be between 1900 and 2100" << std::endl;
+        DisplayError("Release year must be between 1900 and 2100");
 
         std::cin >> movie.releaseYear;
     }
@@ -110,7 +161,7 @@ void AddMovie()
             movie.isClassic = false;
             break;
         } else {
-            std::cout << "You must enter either Y or N";
+            DisplayError("You must enter either Y or N");
 
             std::cin >> input;
         }
@@ -134,26 +185,34 @@ int main()
         char choice;
         std::cin >> choice;
 
+        Movie movie;
+
         switch (choice)
         {
             case 'A':
             case 'a': AddMovie(); break;
 
             case 'V':
-            case 'v': ViewMovie(); break;
+            case 'v': ViewMovie(movie); break;
 
             case 'D':
-            case 'd': std::cout << "Delete not implemented" << std::endl; break;
+            case 'd': DisplayWarning("Delete not implemented"); break;
 
             case 'E':
-            case 'e': std::cout << "Edit not implemented" << std::endl; break;
+            case 'e': DisplayWarning("Edit not implemented"); break;
 
             case 'Q':
             case 'q': done = true;
 
-            default: std::cout << "Invalid choice" << std::endl; break;
+            default: DisplayError("Invalid choice"); break;
         };
     } while (!done);
 
+    //std::cin.ignore();
+    //function call ::= func()
+    // viewMovie();
+}
 
-  
+
+  // parameter kind   (parameter is only available inside the function.)
+//1. input / pass by value
