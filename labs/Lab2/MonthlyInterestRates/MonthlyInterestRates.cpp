@@ -76,16 +76,34 @@ void main()
                 << std::setw(10) << "$ " << std::setw(6) << 0.00
                 << std::setw(10) << "$ " << std::setw(8) << balance
                 << std::endl;
-        }
-        else
+        } else
         {
-            if (payment > balance)
+            if (monthlyPayment > balance)
             {
-                payment = balance;
+                monthlyPayment = balance;
             }
 
-            balance = balance - payment;
+            balance = balance - monthlyPayment;
+            totalPayments = totalPayments + monthlyPayment;
 
+            if (balance > 0)
+            {
+                interest = balance * interestRate;
 
+            } else
+            {
+                interest = 0.0;
+            }
+            balance = balance + interest;
+            totalInterest = totalInterest + interest;
+
+            if (balance < 0)
+            {
+                balance = 0.0;
+            }
+            std::cout << std::setw(2) << month
+                      << std::setw(12) << "$" << std::setw(8) << (balance - interest + monthlyPayment);
+                      
+        }
 
   }
