@@ -52,13 +52,14 @@ void main()
 
     // displaying monthly table 
     std::cout << std::fixed << std::setprecision(2);
-    std::cout << "Month"
-        << std::setw(12) << "Balance"
-        << std::setw(14) << "Payment"
-        << std::setw(14) << "Interest"
-        << std::setw(16) << "New Balance"
-        << std::endl;
-    std::cout << std::setw(70) << std::setfill('-') << "" << std::setfill(' ') << std::endl;
+    std::cout << " "
+              << std::left << std::setw(7) << "Month"
+              << std::right << std::setw(12) << "Balance"
+              << std::setw(14) << "Payment"
+              << std::setw(14) << "Interest"
+              << std::setw(16) << "New Balance"
+              << std::endl;
+    std::cout << std::string(60, '-')  << std::endl;
 
     //initializing variables
     double balance = loanAmount;
@@ -70,13 +71,14 @@ void main()
     {
         if (month == 1)
         {
-            std::cout << std::setw(2) << month
-                << std::setw(12) << "$ " << std::setw(8) << balance
-                << std::setw(10) << "$ " << std::setw(6) << 0.00
-                << std::setw(10) << "$ " << std::setw(6) << 0.00
-                << std::setw(10) << "$ " << std::setw(8) << balance
-                << std::endl;
-        } else
+            std::cout << std::left << std::setw(7) << month
+                      << "$ " << std::setw(11) << balance
+                      << "$ " << std::setw(12) << 0.00
+                      << "$ " << std::setw(12) << 0.00
+                      << "$ " << std::setw(14) << balance
+                      << std::endl;
+        }
+        else
         {
             if (monthlyPayment > balance)
             {
@@ -90,7 +92,8 @@ void main()
             {
                 interest = balance * interestRateDecimal;
 
-            } else
+            } 
+            else
             {
                 interest = 0.0;
             }
@@ -101,23 +104,23 @@ void main()
             {
                 balance = 0.0;
             }
-            std::cout << std::setw(2) << month
-                << std::setw(12) << "$" << std::setw(8) << (balance - interest + monthlyPayment)
-                << std::setw(10) << "$" << std::setw(6) << monthlyPayment
-                << std::setw(10) << "$" << std::setw(6) << interest
-                << std::setw(10) << "$" << std::setw(8) << balance
-                << std::endl;
+            std::cout << std::left << std::setw(7) << month
+                      << "$" << std::setw(11) << (balance - interest + monthlyPayment)
+                      << "$" << std::setw(12) << monthlyPayment
+                      << "$" << std::setw(12) << interest
+                      << "$" << std::setw(14) << balance
+                      << std::endl;
         }
         if (balance <= 0)
         {
             for (int i = month + 1; i <= 12; i++)
             {
-                std::cout << std::setw(2) << i
-                    << std::setw(12) << "$" << std::setw(8) << 0.00
-                    << std::setw(10) << "$" << std::setw(6) << 0.00
-                    << std::setw(10) << "$" << std::setw(6) << 0.00
-                    << std::setw(10) << "$" << std::setw(8) << 0.00
-                    << std::endl;
+                std::cout << std::left << std::setw(7) << i
+                          << "$" << std::setw(11) << 0.00
+                          << "$" << std::setw(12) << 0.00
+                          << "$" << std::setw(12) << 0.00
+                          << "$" << std::setw(14) << 0.00
+                          << std::endl;
 
 
             }
@@ -125,10 +128,11 @@ void main()
         }
 
     }
-    std::cout << "Total" << std::setw(20) << " "
-        << "$" << std::setw(8) << totalPayments
-        << std::setw(10) << " "
-        << "$" << std::setw(8) << totalInterest
+    std::cout << std::string(60, '-') << std::endl;
+    std::cout << std::left << std::setw(7) << "Total"
+        << std::right << std::setw(12) << " "
+        << "$" << std::setw(12) << totalPayments
+        << "$" << std::setw(12) << totalInterest
         << std::endl;
 }
 
