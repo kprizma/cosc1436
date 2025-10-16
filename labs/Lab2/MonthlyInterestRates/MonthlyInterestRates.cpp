@@ -36,7 +36,7 @@ void main()
         std::cout << "Please enter the interest rate (1.0% - 100.0%): ";
         std::cin >> interestRate;
     }
-    double nterestRate = interestRate / 100.0;
+    double interestRateDecimal = interestRate / 100.0;
 
      //prompting for payment amount
     double monthlyPayment = 0.0;
@@ -58,7 +58,7 @@ void main()
         << std::setw(14) << "Interest"
         << std::setw(16) << "New Balance"
         << std::endl;
-    std::cout << std::setw(65) << std::setfill('-') << "" << std::setfill(' ') << std::endl;
+    std::cout << std::setw(70) << std::setfill('-') << "" << std::setfill(' ') << std::endl;
 
     //initializing variables
     double balance = loanAmount;
@@ -88,7 +88,7 @@ void main()
 
             if (balance > 0)
             {
-                interest = balance * interestRate;
+                interest = balance * interestRateDecimal;
 
             } else
             {
@@ -124,6 +124,11 @@ void main()
             break;
         }
 
-
-
     }
+    std::cout << "Total" << std::setw(20) << " "
+        << "$" << std::setw(8) << totalPayments
+        << std::setw(10) << " "
+        << "$" << std::setw(8) << totalInterest
+        << std::endl;
+}
+
