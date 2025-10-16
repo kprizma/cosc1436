@@ -43,7 +43,7 @@ void main()
     std::cout << " How much do you want to pay each month?";
     std::cin >> monthlyPayment;
 
-    while (monthlyPayment < 0 || monthlyPayment > loanAmount)
+    while (monthlyPayment <= 0 || monthlyPayment > loanAmount)
     {
         std::cout << " This is an invalid value. " << std::endl;
         std::cout << " How much do you want to pay each month? ";
@@ -52,12 +52,11 @@ void main()
 
     // displaying monthly table 
     std::cout << std::fixed << std::setprecision(2);
-    std::cout << "\n "
-              << std::left << std::setw(7) << "Month"
-              << std::right << std::setw(14) << "Balance"
-              << std::setw(16) << "Payment"
-              << std::setw(16) << "Interest"
-              << std::setw(18) << "New Balance"
+    std::cout << "\nMonth "
+              << std::setw(13) << "Balance"
+              << std::setw(15) << "Payment"
+              << std::setw(15) << "Interest"
+              << std::setw(15) << "New Balance"
               << std::endl;
     std::cout << std::string(70, '-')  << std::endl;
 
@@ -67,15 +66,15 @@ void main()
     double totalPayments = 0.0;
     double totalInterest = 0.0;
 
-    for (int month = 1; month <= 12; month++)
+    for (int month = 1; month <= 12; ++month)
     {
         if (month == 1)
         {
             std::cout << std::left << std::setw(7) << month
-                      << "$ " << std::setw(11) << balance
-                      << "$ " << std::setw(12) << 0.00
-                      << "$ " << std::setw(12) << 0.00
-                      << "$ " << std::setw(14) << balance
+                      << "$" << std::setw(10) << std::right << balance
+                      << "$" << std::setw(10) << 0.00
+                      << "$" << std::setw(10) << 0.00
+                      << "$" << std::setw(10) << balance
                       << std::endl;
         }
         else
@@ -85,8 +84,8 @@ void main()
                 monthlyPayment = balance;
             }
 
-            balance = balance - monthlyPayment;
-            totalPayments = totalPayments + monthlyPayment;
+            balance -= monthlyPayment;
+            totalPayments += monthlyPayment;
 
             if (balance > 0)
             {
@@ -97,30 +96,30 @@ void main()
             {
                 interest = 0.0;
             }
-            balance = balance + interest;
-            totalInterest = totalInterest + interest;
+            balance += interest;
+            totalInterest += interest;
 
             if (balance < 0)
             {
                 balance = 0.0;
             }
             std::cout << std::left << std::setw(7) << month
-                << std::right << "$ " << std::setw(8) << std::setw(8) << (balance - interest + monthlyPayment)
-                << std::setw(12) << "$ " << std::setw(8) << monthlyPayment
-                << std::setw(12) << "$ " << std::setw(8) << interest
-                << std::setw(14) << "$ " << std::setw(8) << balance
-                << std::endl;
+                      << "$" << std::setw(10) << std::right << (balance - interest + monthlyPayment)
+                      << "$" << std::setw(10) << monthlyPayment
+                      << "$" << std::setw(10) << interest
+                      << "$" << std::setw(10) << balance
+                      << std::endl;
         }
         if (balance <= 0)
         {
-            for (int i = month + 1; i <= 12; i++)
+            for (int i = month + 1; i <= 12; ++i)
             {
                 std::cout << std::left << std::setw(7) << i
-                    << std::right << "$ " << std::setw(8) << 0.00
-                    << std::setw(12) << "$ " << std::setw(8) << 0.00
-                    << std::setw(12) << "$ " << std::setw(8) << 0.00
-                    << std::setw(14) << "$ " << std::setw(8) << 0.00
-                    << std::endl;
+                          << "$" << std::setw(10) << std::right << 0.00
+                          << "$" << std::setw(10) << 0.00
+                          << "$" << std::setw(10) << 0.00
+                          << "$" << std::setw(10) << 0.00
+                          << std::endl;
 
 
             }
@@ -130,8 +129,9 @@ void main()
     }
     std::cout << std::string(70, '-') << std::endl;
     std::cout << std::left << std::setw(7) << "Total"
-        << std::right << std::setw(20) << "$ " << std::setw(8) << totalPayments
-        << std::setw(14) << "$ " << std::setw(8) << totalInterest
-        << std::endl;
+              << std::setw(13) << " "
+              << "$" << std::setw(10) << totalPayments
+              << "$" << std::setw(10) << totalInterest
+              << std::endl;
 }
 
