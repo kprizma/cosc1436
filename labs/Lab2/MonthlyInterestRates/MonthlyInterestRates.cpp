@@ -105,22 +105,22 @@ void main()
                 balance = 0.0;
             }
             std::cout << std::left << std::setw(7) << month
-                      << "$" << std::setw(11) << (balance - interest + monthlyPayment)
-                      << "$" << std::setw(12) << monthlyPayment
-                      << "$" << std::setw(12) << interest
-                      << "$" << std::setw(14) << balance
-                      << std::endl;
+                << std::right << std::setw(10) << "$ " << std::setw(8) << (balance - interest + monthlyPayment)
+                << std::setw(14) << "$ " << std::setw(8) << monthlyPayment
+                << std::setw(14) << "$ " << std::setw(8) << interest
+                << std::setw(14) << "$ " << std::setw(8) << balance
+                << std::endl;
         }
         if (balance <= 0)
         {
             for (int i = month + 1; i <= 12; i++)
             {
                 std::cout << std::left << std::setw(7) << i
-                          << "$" << std::setw(11) << 0.00
-                          << "$" << std::setw(12) << 0.00
-                          << "$" << std::setw(12) << 0.00
-                          << "$" << std::setw(14) << 0.00
-                          << std::endl;
+                    << std::right << std::setw(10) << "$ " << std::setw(8) << 0.00
+                    << std::setw(14) << "$ " << std::setw(8) << 0.00
+                    << std::setw(14) << "$ " << std::setw(8) << 0.00
+                    << std::setw(14) << "$ " << std::setw(8) << 0.00
+                    << std::endl;
 
 
             }
@@ -128,11 +128,10 @@ void main()
         }
 
     }
-    std::cout << std::string(60, '-') << std::endl;
+    std::cout << std::string(70, '-') << std::endl;
     std::cout << std::left << std::setw(7) << "Total"
-        << std::right << std::setw(12) << " "
-        << "$" << std::setw(12) << totalPayments
-        << "$" << std::setw(12) << totalInterest
+        << std::right << std::setw(23) << "$ " << std::setw(8) << totalPayments
+        << std::setw(14) << "$ " << std::setw(8) << totalInterest
         << std::endl;
 }
 
