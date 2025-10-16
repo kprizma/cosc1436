@@ -102,8 +102,28 @@ void main()
                 balance = 0.0;
             }
             std::cout << std::setw(2) << month
-                      << std::setw(12) << "$" << std::setw(8) << (balance - interest + monthlyPayment);
-                      
+                << std::setw(12) << "$" << std::setw(8) << (balance - interest + monthlyPayment)
+                << std::setw(10) << "$" << std::setw(6) << monthlyPayment
+                << std::setw(10) << "$" << std::setw(6) << interest
+                << std::setw(10) << "$" << std::setw(8) << balance
+                << std::endl;
+        }
+        if (balance <= 0)
+        {
+            for (int i = month + 1; i <= 12; i++)
+            {
+                std::cout << std::setw(2) << i
+                    << std::setw(12) << "$" << std::setw(8) << 0.00
+                    << std::setw(10) << "$" << std::setw(6) << 0.00
+                    << std::setw(10) << "$" << std::setw(6) << 0.00
+                    << std::setw(10) << "$" << std::setw(8) << 0.00
+                    << std::endl;
+
+
+            }
+            break;
         }
 
-  }
+
+
+    }
