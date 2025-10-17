@@ -34,23 +34,104 @@ void main()
     {
         std::cout << "That is an invalid value." << std::endl;
         std::cout << "Please enter the interest rate (1.0% - 100.0%): ";
-        std::cin >> interestRate ;
+        std::cin >> interestRate;
     }
-   double nterestRate = interestRate / 100.0;
+    double interestRateDecimal = interestRate / 100.0;
 
-    //prompting for payment amount
-   double monthlyPayment = 0.0;
-   std::cout << " How much do you want to pay each month?" ;
-   std::cin >> monthlyPayment;
-   
-   while (monthlyPayment < 0 || monthlyPayment > loanAmount)
-   {
-       std::cout << " This is an invalid value. " << std::endl;
-       std::cout << " How much do you want to pay each month? ";
-       std::cin >> monthlyPayment;
-   }
+     //prompting for payment amount
+    double monthlyPayment = 0.0;
+    std::cout << " How much do you want to pay each month?";
+    std::cin >> monthlyPayment;
 
-    
+    while (monthlyPayment <= 0 || monthlyPayment > loanAmount)
+    {
+        std::cout << " This is an invalid value. " << std::endl;
+        std::cout << " How much do you want to pay each month? ";
+        std::cin >> monthlyPayment;
+    }
+
+    // displaying monthly table 
+    std::cout << std::fixed << std::setprecision(2);
+    std::cout << "\nMonth "
+              << std::setw(13) << "Balance"
+              << std::setw(15) << "Payment"
+              << std::setw(15) << "Interest"
+              << std::setw(15) << "New Balance"
+              << std::endl;
+    std::cout << std::string(70, '-')  << std::endl;
+
+    //initializing variables
+    double balance = loanAmount;
+    double interest = 0.0;
+    double totalPayments = 0.0;
+    double totalInterest = 0.0;
+
+    for (int month = 1; month <= 12; ++month)
+    {
+        if (month == 1)
+        {
+            std::cout << std::left << std::setw(7) << month
+                      << "$" << std::setw(10) << std::right << balance
+                      << "$" << std::setw(10) << 0.00
+                      << "$" << std::setw(10) << 0.00
+                      << "$" << std::setw(10) << balance
+                      << std::endl;
+        }
+        else
+        {
+            if (monthlyPayment > balance)
+            {
+                monthlyPayment = balance;
+            }
+
+            balance -= monthlyPayment;
+            totalPayments += monthlyPayment;
+
+            if (balance > 0)
+            {
+                interest = balance * interestRateDecimal;
+
+            } 
+            else
+            {
+                interest = 0.0;
+            }
+            balance += interest;
+            totalInterest += interest;
+
+            if (balance < 0)
+            {
+                balance = 0.0;
+            }
+            std::cout << std::left << std::setw(7) << month
+                      << "$" << std::setw(10) << std::right << (balance - interest + monthlyPayment)
+                      << "$" << std::setw(10) << monthlyPayment
+                      << "$" << std::setw(10) << interest
+                      << "$" << std::setw(10) << balance
+                      << std::endl;
+        }
+        if (balance <= 0)
+        {
+            for (int i = month + 1; i <= 12; ++i)
+            {
+                std::cout << std::left << std::setw(7) << i
+                          << "$" << std::setw(10) << std::right << 0.00
+                          << "$" << std::setw(10) << 0.00
+                          << "$" << std::setw(10) << 0.00
+                          << "$" << std::setw(10) << 0.00
+                          << std::endl;
+
+
+            }
+            break;
+        }
+
+    }
+    std::cout << std::string(70, '-') << std::endl;
+    std::cout << std::left << std::setw(7) << "Total"
+              << std::setw(13) << " "
+              << "$" << std::setw(10) << totalPayments
+              << "$" << std::setw(10) << totalInterest
+              << std::endl;
 }
-
 
