@@ -81,17 +81,23 @@ int main()
         } else
         {
             if (monthlyPayment > balance)
+            {
                 monthlyPayment = balance;
 
+            }
+                
             double previousBalance = balance;
 
             balance = balance - monthlyPayment;
             totalPayments = totalPayments + monthlyPayment;
 
             if (balance > 0)
-
+            {
                 interest = balance * interestRateDecimal;
 
+            }
+
+               
             else
 
                 interest = 0.0;
