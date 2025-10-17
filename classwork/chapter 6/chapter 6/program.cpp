@@ -31,7 +31,9 @@ enum class ForegroundColor {
     BrightCyan = 96
 };
 
-
+// function prototypes
+// forward declarations/ referencing
+void DisplayError(std::string);
 
 
 void ResetTextColor()
@@ -46,6 +48,28 @@ void SetTextColor (ForegroundColor color)
     std::cout << "\033[" << (int)color << "m";
 }
 
+bool Confirm ( std::string message)
+    {
+    std::cout << message << "(Y/N)";
+    std::string input;
+    std::cin >> input;
+
+    while (true)
+    {
+        if (_strcmpi(input.c_str(), "Y") == 0)
+            return true;
+
+        else if (_strcmpi(input.c_str(), "N") == 0)
+            return false;
+        
+         else 
+         {
+            DisplayError("You must enter either Y or N");
+
+            std::cin >> input;
+         }
+    }
+ }
 
 // <summary> displays an error message. </summary>
 // <param name = "message"> message to display. </param>
@@ -66,7 +90,23 @@ void DisplayWarning(std::string message)
     ResetTextColor();
 }
 
+std::string ReadString(std::string message, bool isRequired)
+{
+    
+    std::cout << message;
 
+    std::string input;
+    std::getline(std::cin, input);
+
+    
+    while (isRequired && input == "")
+    {
+        DisplayError(" Value is required ");
+
+        std::getline(std::cin, input);
+    }
+    return input;
+}
 /// <summary> view details of a movie. </summary>
 /// <remarks>
 /// more details including paragraphs of data if you want.
@@ -92,23 +132,15 @@ void ViewMovie(Movie movie)
     std::cout << std::endl;
 }
 
-void AddMovie()
+Movie AddMovie()
 {
     Movie movie;// = {0};
 
     //Get movie details
-    std::cout << "Enter movie title: ";
-    std::cin.ignore();
-    std::getline(std::cin, movie.title);
 
-    //Title is required
-    while (movie.title == "")
-    {
-        DisplayError("Title is required ");
-        std::getline(std::cin, movie.title);
-    }
-
+    movie.title = ReadString("Enter movie title: ", true);
     std::cout << "Enter the run length (in minutes): ";
+   
     do
     {
         std::cin >> movie.runLength;
@@ -126,46 +158,40 @@ void AddMovie()
 
         std::cin >> movie.releaseYear;
     }
+    movie.description = ReadString("Enter the optional description: ", false);
 
-    std::cout << "Enter the optional description: ";
-    std::cin.ignore();
-    std::getline(std::cin, movie.description);
 
     // Genres, up to 5
     for (int index = 0; index < 5; ++index)
     {
-        std::string genre;
+        std::string genre = ReadString("Enter the genre (or blank to continue): ", false);
 
-        std::cout << "Enter the genre (or blank to continue): ";
-        std::getline(std::cin, genre);
+        
         if (genre == "")
             break;
         else if (genre == " ")
             continue;
 
         movie.genres = movie.genres + ", " + genre;
+
     }
+    movie.isClassic = Confirm("Is this a classic movie?");
+    return movie;
 
-    std::cout << "Is this a classic (Y/N)? ";
-    std::string input;
-    std::cin >> input;
+}
 
-    while (true)
-    {
-        if (_strcmpi(input.c_str(), "Y") == 0)
-        {
-            movie.isClassic = true;
-            break;
-        } else if (_strcmpi(input.c_str(), "N") == 0)
-        {
-            movie.isClassic = false;
-            break;
-        } else {
-            DisplayError("You must enter either Y or N");
+void DeleteMovie(Movie movie)
+{
+    if (!Confirm("Are you sure you want to delete" + movie.title + "?"))
+        return;
 
-            std::cin >> input;
-        }
-    }
+    // to to: Delete movie
+    DisplayWarning("Not implemented yet");
+}
+
+void EditMovie(Movie movie)
+{
+    DisplayWarning("Not implemented yet");
 }
 
 int main()
@@ -190,7 +216,7 @@ int main()
         switch (choice)
         {
             case 'A':
-            case 'a': AddMovie(); break;
+            case 'a':movie = AddMovie(); break;
 
             case 'V':
             case 'v': ViewMovie(movie); break;
@@ -199,7 +225,7 @@ int main()
             case 'd': DisplayWarning("Delete not implemented"); break;
 
             case 'E':
-            case 'e': DisplayWarning("Edit not implemented"); break;
+            case 'e': EditMovie(movie); break;
 
             case 'Q':
             case 'q': done = true;
@@ -216,3 +242,4 @@ int main()
 
   // parameter kind   (parameter is only available inside the function.)
 //1. input / pass by value
+// 2. output Parameter = provide the storage for the parameter but not the value.  they are designed to get out the data value.
