@@ -90,6 +90,31 @@ void DisplayWarning(std::string message)
     ResetTextColor();
 }
 
+
+int ReadInt( int minimumValue, int maximumValue)
+{
+    
+    do
+    {
+        int value;
+        std::cin >> value;
+
+        
+        if (value >= minimumValue && value <= maximumValue)
+            return value;
+
+        DisplayError("Value too small");
+
+
+    } while (true);
+}
+
+int ReadInt(int minimumValue)
+{
+    return ReadInt(minimumValue, INT_MAX);
+
+}
+
 std::string ReadString(std::string message, bool isRequired)
 {
     
@@ -120,7 +145,11 @@ std::string ReadString(std::string message, bool isRequired)
 
 void ViewMovie(Movie movie)
 {
-    
+    if (movie.title == "")
+    {
+        DisplayWarning("No movies exists");
+        return;
+    }
 
     std::cout << std::fixed << std::setprecision(1) << std::endl;
     std::cout << movie.title << " (" << movie.releaseYear << ")" << std::endl;
@@ -141,23 +170,12 @@ Movie AddMovie()
     movie.title = ReadString("Enter movie title: ", true);
     std::cout << "Enter the run length (in minutes): ";
    
-    do
-    {
-        std::cin >> movie.runLength;
-
-        //Error
-        if (movie.runLength < 0)
-            DisplayError("Run length must be at least 0");
-    } while (movie.runLength < 0);
+    movie.runLength = ReadInt(0);
 
     std::cout << "Enter the release year (1900-2100): ";
     std::cin >> movie.releaseYear;
-    while (movie.releaseYear < 1900 || movie.releaseYear > 2100)
-    {
-        DisplayError("Release year must be between 1900 and 2100");
+    movie.releaseYear = ReadInt(1900, 2100);
 
-        std::cin >> movie.releaseYear;
-    }
     movie.description = ReadString("Enter the optional description: ", false);
 
 
@@ -180,16 +198,17 @@ Movie AddMovie()
 
 }
 
-void DeleteMovie(Movie movie)
+void DeleteMovie(Movie& movie)
 {
     if (!Confirm("Are you sure you want to delete" + movie.title + "?"))
         return;
 
     // to to: Delete movie
-    DisplayWarning("Not implemented yet");
+   // DisplayWarning("Not implemented yet");
+    movie.title = "";
 }
 
-void EditMovie(Movie movie)
+void EditMovie(Movie& movie)
 {
     DisplayWarning("Not implemented yet");
 }
@@ -197,6 +216,7 @@ void EditMovie(Movie movie)
 int main()
 {
     //Display main menu
+    Movie movie;
     bool done = false;
     do
     {
@@ -211,7 +231,7 @@ int main()
         char choice;
         std::cin >> choice;
 
-        Movie movie;
+       
 
         switch (choice)
         {
@@ -222,7 +242,7 @@ int main()
             case 'v': ViewMovie(movie); break;
 
             case 'D':
-            case 'd': DisplayWarning("Delete not implemented"); break;
+            case 'd': DeleteMovie( movie); break;
 
             case 'E':
             case 'e': EditMovie(movie); break;
@@ -241,5 +261,8 @@ int main()
 
 
   // parameter kind   (parameter is only available inside the function.)
-//1. input / pass by value
-// 2. output Parameter = provide the storage for the parameter but not the value.  they are designed to get out the data value.
+//1. input / pass by value (T id)
+// 2. inout output / pass by reference  (T & id)
+// 3. output / return type
+
+// output Parameter(provide the storage for the parameter but not the value.they are designed to get out the data value.)
