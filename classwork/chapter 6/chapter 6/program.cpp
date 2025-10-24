@@ -210,13 +210,64 @@ void DeleteMovie(Movie& movie)
 
 void EditMovie(Movie& movie)
 {
-    DisplayWarning("Not implemented yet");
+    DisplayWarning("Not Implemented yet");
 }
+void Display(int value)
+{
+    std::cout << "int" << std::endl;
+}
+void Display(double value)
+{
+    std::cout << "double" << std::endl;
+}
+void Display(float value)
+{
+    std::cout << "float" << std::endl;
+}
+void Display(short value1, double value2)
+{
+    std::cout << "int, double" << std::endl;
+}
+
+void Display(short value, float)
+{
+    std::cout << "short, float" << std::endl;
+}
+void Display(int, short)
+{
+    std::cout << "int, short" << std::endl;
+}
+void Dispplay(short, int)
+{
+    std::cout << "int, short" << std::endl;
+}
+/*void TestFunctionOverloading()
+{
+    Display(10); //Display(int)
+    Display(4.56); //Display(double)
+    Display((short)34);   // Display(int = shortest type coercion
+    Display(10, 4.56F); // Display (int, double)
+
+    long lValue = 10000L;
+    Display(lValue, 4.56);
+
+    Display('c' , 4.56F);
+    Display((short)5, (short)10);
+    
+}*/
 
 int main()
 {
-    //Display main menu
+    // cannot calculate the size of an array at runtime so use a const int variable
+     const int  MaximumMovies = 100;
+    
+
+    // TO DO; Leaving this for now to avoid breakign code
+    
     Movie movie;
+    Movie movies[MaximumMovies];
+
+    //display main menu
     bool done = false;
     do
     {
@@ -266,3 +317,11 @@ int main()
 // 3. output / return type
 
 // output Parameter(provide the storage for the parameter but not the value.they are designed to get out the data value.)
+
+
+// an element is a singular value stored in an array.
+// an arrya is an list of values of same type
+// c++ doesnot allow you to dislay arrray without size.
+// 1. size is required at decimal
+// 2. size > 0
+// 3. size must be const/int expression known  at compile time
