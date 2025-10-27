@@ -90,6 +90,31 @@ void DisplayWarning(std::string message)
     ResetTextColor();
 }
 
+
+int ReadInt( int minimumValue, int maximumValue)
+{
+    
+    do
+    {
+        int value;
+        std::cin >> value;
+
+        
+        if (value >= minimumValue && value <= maximumValue)
+            return value;
+
+        DisplayError("Value too small");
+
+
+    } while (true);
+}
+
+int ReadInt(int minimumValue)
+{
+    return ReadInt(minimumValue, INT_MAX);
+
+}
+
 std::string ReadString(std::string message, bool isRequired)
 {
     
@@ -120,7 +145,11 @@ std::string ReadString(std::string message, bool isRequired)
 
 void ViewMovie(Movie movie)
 {
-    
+    if (movie.title == "")
+    {
+        DisplayWarning("No movies exists");
+        return;
+    }
 
     std::cout << std::fixed << std::setprecision(1) << std::endl;
     std::cout << movie.title << " (" << movie.releaseYear << ")" << std::endl;
@@ -141,23 +170,12 @@ Movie AddMovie()
     movie.title = ReadString("Enter movie title: ", true);
     std::cout << "Enter the run length (in minutes): ";
    
-    do
-    {
-        std::cin >> movie.runLength;
-
-        //Error
-        if (movie.runLength < 0)
-            DisplayError("Run length must be at least 0");
-    } while (movie.runLength < 0);
+    movie.runLength = ReadInt(0);
 
     std::cout << "Enter the release year (1900-2100): ";
     std::cin >> movie.releaseYear;
-    while (movie.releaseYear < 1900 || movie.releaseYear > 2100)
-    {
-        DisplayError("Release year must be between 1900 and 2100");
+    movie.releaseYear = ReadInt(1900, 2100);
 
-        std::cin >> movie.releaseYear;
-    }
     movie.description = ReadString("Enter the optional description: ", false);
 
 
@@ -180,23 +198,76 @@ Movie AddMovie()
 
 }
 
-void DeleteMovie(Movie movie)
+void DeleteMovie(Movie& movie)
 {
     if (!Confirm("Are you sure you want to delete" + movie.title + "?"))
         return;
 
     // to to: Delete movie
-    DisplayWarning("Not implemented yet");
+   // DisplayWarning("Not implemented yet");
+    movie.title = "";
 }
 
-void EditMovie(Movie movie)
+void EditMovie(Movie& movie)
 {
-    DisplayWarning("Not implemented yet");
+    DisplayWarning("Not Implemented yet");
 }
+void Display(int value)
+{
+    std::cout << "int" << std::endl;
+}
+void Display(double value)
+{
+    std::cout << "double" << std::endl;
+}
+void Display(float value)
+{
+    std::cout << "float" << std::endl;
+}
+void Display(short value1, double value2)
+{
+    std::cout << "int, double" << std::endl;
+}
+
+void Display(short value, float)
+{
+    std::cout << "short, float" << std::endl;
+}
+void Display(int, short)
+{
+    std::cout << "int, short" << std::endl;
+}
+void Dispplay(short, int)
+{
+    std::cout << "int, short" << std::endl;
+}
+/*void TestFunctionOverloading()
+{
+    Display(10); //Display(int)
+    Display(4.56); //Display(double)
+    Display((short)34);   // Display(int = shortest type coercion
+    Display(10, 4.56F); // Display (int, double)
+
+    long lValue = 10000L;
+    Display(lValue, 4.56);
+
+    Display('c' , 4.56F);
+    Display((short)5, (short)10);
+    
+}*/
 
 int main()
 {
-    //Display main menu
+    // cannot calculate the size of an array at runtime so use a const int variable
+     const int  MaximumMovies = 100;
+    
+
+    // TO DO; Leaving this for now to avoid breakign code
+    
+    Movie movie;
+    Movie movies[MaximumMovies];
+
+    //display main menu
     bool done = false;
     do
     {
@@ -211,7 +282,7 @@ int main()
         char choice;
         std::cin >> choice;
 
-        Movie movie;
+       
 
         switch (choice)
         {
@@ -222,7 +293,7 @@ int main()
             case 'v': ViewMovie(movie); break;
 
             case 'D':
-            case 'd': DisplayWarning("Delete not implemented"); break;
+            case 'd': DeleteMovie( movie); break;
 
             case 'E':
             case 'e': EditMovie(movie); break;
@@ -241,5 +312,16 @@ int main()
 
 
   // parameter kind   (parameter is only available inside the function.)
-//1. input / pass by value
-// 2. output Parameter = provide the storage for the parameter but not the value.  they are designed to get out the data value.
+//1. input / pass by value (T id)
+// 2. inout output / pass by reference  (T & id)
+// 3. output / return type
+
+// output Parameter(provide the storage for the parameter but not the value.they are designed to get out the data value.)
+
+
+// an element is a singular value stored in an array.
+// an arrya is an list of values of same type
+// c++ doesnot allow you to dislay arrray without size.
+// 1. size is required at decimal
+// 2. size > 0
+// 3. size must be const/int expression known  at compile time
