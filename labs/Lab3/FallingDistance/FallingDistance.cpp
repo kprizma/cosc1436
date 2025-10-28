@@ -46,12 +46,54 @@ char GetUnits()
     }
 }
 
-//creating the falling distance function
-double CalculateFallingDistance(int time)
+//calculating the falling distance function using the formula 0.5 * g * t^2.
+double CalculateFallingDistance(int seconds)
 {
-    double distance = 0.5 * Gravity * (time * time);
+    double distance = 0.5 * Gravity * (seconds * seconds);
     return distance;
 }
 
+//calculating velocity using the formula g * t.
+double CalculateVelocity(int seconds)
+{
+    double velocity = Gravity * seconds;
+    if (velocity > 90)
+        velocity = 90;
+
+   return velocity;
+}
+
+//converting meters to feet.
+double ConvertToFeet(double meters)
+{
+    double MetersToFeet = meters * MetersToFeet;
+    return MetersToFeet;
+}
+void DisplayTable(int seconds, char units)
+{
+    std::cout << std::endl;
+    std::cout << " Seconds          Distance          Velocity" << std::endl;
+    std::cout << " ===========================================" << std::endl;
+    std::cout << std::fixed << std::setprecision(2);
+
+    for (int t = 1; t <= seconds; ++t)
+    {
+        double distance = CalculateFallingDistance(t);
+        double velocity = CalculateVelocity(t);
+        if (units == 'f')
+        {
+            distance = ConvertToFeet(distance);
+            velocity = ConvertToFeet(velocity);
+        }
+        std::cout << std::setw(6) << t
+            << std::setw(14) << distance << " " << (units == 'f' ? "ft" : "m")
+            << std::setw(10) << velocity << " " << (units == 'f' ? "ft/s" : "m/s")
+            << std::endl;
+    }
+}
+void DisplayError(std::string message)
+{
+    std::cout << "Error: " << message << std::endl;
+}
 
 
