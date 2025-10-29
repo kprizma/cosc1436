@@ -29,6 +29,7 @@ int GetFallingTime()
         std::cout << "Please enter the number of seconds? ";
         std::cin >> time;
     }
+    return time;
 }
 
 //Asking user what units to display results in (meters or feet)
@@ -44,6 +45,7 @@ char GetUnits()
         std::cin >> units;
 
     }
+    return units;
 }
 
 //calculating the falling distance function using the formula 0.5 * g * t^2.
@@ -66,15 +68,15 @@ double CalculateVelocity(int seconds)
 //converting meters to feet.
 double ConvertToFeet(double meters)
 {
-    double MetersToFeet = meters * MetersToFeet;
-    return MetersToFeet;
+    double feet = meters * 3.28084;
+    return feet;
 }
 void DisplayTable(int seconds, char units)
 {
     std::cout << std::endl;
     std::cout << " Seconds          Distance          Velocity" << std::endl;
     std::cout << " ===========================================" << std::endl;
-    std::cout << std::fixed << std::setprecision(2);
+    std::cout << std::fixed << std::setprecision(1);
 
     for (int t = 1; t <= seconds; ++t)
     {
@@ -94,6 +96,17 @@ void DisplayTable(int seconds, char units)
 void DisplayError(std::string message)
 {
     std::cout << "Error: " << message << std::endl;
+}
+int main()
+{
+    ShowProgramInformation();
+
+    int time = GetFallingTime();
+    char units = GetUnits();
+
+    DisplayTable(time, units);
+
+    return 0;
 }
 
 
