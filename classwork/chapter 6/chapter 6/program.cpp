@@ -211,7 +211,7 @@ Movie AddMovie()
 
 }
 
-void DeleteMovie(Movie& movie)
+void DeleteMovie()
 {
     if (!Confirm("Are you sure you want to delete" + movie.title + "?"))
         return;
@@ -221,10 +221,31 @@ void DeleteMovie(Movie& movie)
     movie.title = "";
 }
 
-void EditMovie(Movie& movie)
+void EditMovie()
 {
     DisplayWarning("Not Implemented yet");
 }
+
+
+
+int AddToMovieArray(Movie movies[], int size, Movie movie)
+{
+    // enumerate the array looking for the first blank movie
+    for (int index = 0; index < size; ++index)
+    {
+        if (movies[index].title == "")
+        {
+            // set the array element
+            movies[index] = movie;
+            return index;
+        }
+    }
+    DisplayError("No space available for new movie");
+    return -1;
+}
+
+
+
 void Display(int value)
 {
     std::cout << "int" << std::endl;
@@ -250,7 +271,7 @@ void Display(int, short)
 {
     std::cout << "int, short" << std::endl;
 }
-void Dispplay(short, int)
+void Display(short, int)
 {
     std::cout << "int, short" << std::endl;
 }
@@ -352,16 +373,16 @@ int main()
         switch (choice)
         {
             case 'A':
-            case 'a':movies[0] = AddMovie(); break;
+            case 'a': AddToMovieArray(movies, MaximumMovies, AddMovie()); break;
 
             case 'V':
             case 'v': ViewMovies(movies, MaximumMovies); break;
 
             case 'D':
-            case 'd': DeleteMovie( movie); break;
+            case 'd': DeleteMovie(); break;
 
             case 'E':
-            case 'e': EditMovie(movie); break;
+            case 'e': EditMovie(); break;
 
             case 'Q':
             case 'q': done = true;
