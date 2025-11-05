@@ -341,10 +341,36 @@ void ArrayDemo()
     //std::cin >> numbers;
 }
 
+void DisplayRow(int values[], int size)
+{
+    for (int row = 0; row < size; ++row)
+    {
+        // do stuff here
+        std::cout << values[row] << " ";
+    }
+
+}
+
+// all dimensional beyond first must be specified in parameter declaration
+void DisplayTable(int table[][31], int size)
+{
+    for (int row = 0; row < size; ++row)
+    {
+        DisplayRow(table[row], 31);
+        std::cout << std::endl;
+    }
+}
+
+
 void MultidimensionalArrayDemo()
 {
     // months are the rows, days are columns
-    int months[12][31];
+    // int syntax is 1 row at a time
+    // int months [12] [31] = {1, 2, 3, 4, 5}
+    int months[12][31] = {
+                           {1, 2, 3, 4, 5 },        // row 1
+                           { 2, 4, 6, 8, 10 },        // row 2
+                         };
 
     for (int row = 0; row < 12; ++row)
         for (int col = 0; col < 31; ++col)
@@ -352,16 +378,8 @@ void MultidimensionalArrayDemo()
             //do stuff here
             months[row][col] = (row + 1) * (col + 1);
         }
+    DisplayTable(months, 12);
 
-    for (int row = 0; row < 12; ++row)
-    {
-        for (int col = 0; col < 31; ++col)
-        {
-            //do stuff here
-            std::cout << months[row][col] << "";
-        }
-        std::cout << std::endl;
-    }
 }
 
 int main()
