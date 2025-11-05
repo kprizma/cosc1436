@@ -213,6 +213,7 @@ Movie AddMovie()
 
 void DeleteMovie()
 {
+    Movie movie;
     if (!Confirm("Are you sure you want to delete" + movie.title + "?"))
         return;
 
@@ -338,6 +339,29 @@ void ArrayDemo()
     bool areArraysEqual = numbers == numbers3;
     std::cout << numbers;
     //std::cin >> numbers;
+}
+
+void MultidimensionalArrayDemo()
+{
+    // months are the rows, days are columns
+    int months[12][31];
+
+    for (int row = 0; row < 12; ++row)
+        for (int col = 0; col < 31; ++col)
+        {
+            //do stuff here
+            months[row][col] = (row + 1) * (col + 1);
+        }
+
+    for (int row = 0; row < 12; ++row)
+    {
+        for (int col = 0; col < 31; ++col)
+        {
+            //do stuff here
+            std::cout << months[row][col] << "";
+        }
+        std::cout << std::endl;
+    }
 }
 
 int main()
