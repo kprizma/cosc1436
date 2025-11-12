@@ -259,8 +259,69 @@ void PointerDemo()
     pInt = &localInt;
     localInt = 9876;
 
-    // dereferencing a pointer returns the original value
+    // dereferencing a pointer returns the original type T
+    // dereference-op := *ptr
     *pInt = 5678;
+
+    // An unitialized pointer points to garbage
+    // iNITIALIZED POINTER TO MEMORY 0 WHICH IS INVALID
+    // nULL - c version, not preferred as it is still an int
+    // nullptr - preferred in C++
+    //float* pFloat = NULL;
+  float* pFloat = nullptr;
+   // pFloat = 0;  don't do this
+   // pFloat = 1234;
+   
+    
+    // Always ensure pointer is valid (not null) before dereferencing
+    // if (pFloat != nullptr)
+    if (pFloat )
+    {
+        // this is going to crash hard if pointer is Null
+        *pFloat = 123.45;
+    }
+  // Initializing a pointer
+    // nullptr
+    float localFloat = 123.45;
+
+    // initialize a pointer to a local variable or parameter
+    pFloat = &localFloat;  // addresss of localfloat, must be a variable
+
+    *pFloat = 456.78;  // localFloat = 456.78
+    
+    //Inittialize a pointer to an array element
+    float someFloats[10] = {0};
+    pFloat = &someFloats[1];   // Ptr references second element
+
+    //compiler error , types must exactly match
+  //pFloat = pInt;  // float* = int*
+
+    // dynamic memory
+    // new-op ::=new T returns t*
+    pFloat = new float;
+    *pFloat = 89.76;
+
+    for (int index = 0; index < 10000; ++index)
+    {
+        pFloat = new float;
+        *pFloat = index;
+
+        // deleting a pointer twice will crash or corrupt memory
+        delete pFloat;
+        pFloat = nullptr;
+
+        // ensure you call delete for each pointer you allocate using new
+        delete pFloat;
+        pFloat = nullptr;
+        // *pFloat = index; // using a deallocated pointer may crash or corrupt
+    }
+
+
+    // pointer assignment must exactly match the types used (no coercion)
+    // pfloat = float;
+    //somefloat[1] = float
+    // &(Et) = T*
+    // &(someFloats[1] = &(float) = float*
 }
 
 
@@ -316,3 +377,4 @@ int main()
 // pointer are 8 bytes
 // pointer address memory value
 // pointrs value is always a memory address. 
+// memory address 0 is always invalid
