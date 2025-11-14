@@ -9,6 +9,7 @@
 // movie details
 struct Movie
 {
+    int id;                      // unique identifier
     std::string title;          //Required
     std::string description;    //Optional
     int runLength;              //Required, 0
@@ -133,13 +134,27 @@ std::string ReadString(std::string message, bool isRequired)
 }
 
 
-int AddToMovieArray(Movie movies[], int size, Movie movie)
+int AddToMovieArray(Movie* movies[], int size, Movie* movie)
 {
+    static int nextId = 1;
+
+    // validate parameters first
+    // // pointers generally should not null
+    if (movie == nullptr)
+    {
+        DisplayError("Invalid movie");
+        return -1;
+    };
     //Enumerate the array looking for the first blank movie
     for (int index = 0; index < size; ++index)
     {
-        if (movies[index].title == "")
+        //if (movies[index].title == "")
+        //if (!movies[index] == nullptr)
+        if (!movies[index])
         {
+            // set unique ID of movie
+           // movie.id = 0;
+            movie->id = nextId++;
             //Set the array element
             movies[index] = movie;
             return index;
@@ -163,30 +178,39 @@ int AddToMovieArray(Movie movies[], int size, Movie movie)
 // function is a forms of task which is reusable block of code.    reusability , maintainability , performance , encupsulation
 
 
-void ViewMovie(Movie movie)
+void ViewMovie(Movie* movie)
 {    
-    if (movie.title == "")
+   // if (movie->title == "")
+    if (!movie)
     {
         DisplayWarning("No movies exists");
         return;
     }
 
+    //view movie
+    //title (year)
+    //runlengh
+    //user rating
+    // is classi/
+    //description
     std::cout << std::fixed << std::setprecision(1) << std::endl;
-    std::cout << movie.title << " (" << movie.releaseYear << ")" << std::endl;
-    std::cout << "Run Length " << movie.runLength << " mins" << std::endl;
-    std::cout << "Genres " << movie.genres << std::endl;
-    std::cout << "Is Classic? " << (movie.isClassic ? "Yes" : "No") << std::endl;
-    if (movie.description != "")
-        std::cout << movie.description << std::endl;
+    std::cout << "Id " << movie->id << std::endl;
+    std::cout << movie->title << " (" << movie->releaseYear << ")" << std::endl;
+    std::cout << "Run Length " << movie->runLength << " mins" << std::endl;
+    std::cout << "Genres " << movie->genres << std::endl;
+    std::cout << "Is Classic? " << (movie->isClassic ? "Yes" : "No") << std::endl;
+    if (movie->description != "")
+        std::cout << movie->description << std::endl;
     std::cout << std::endl;
 }
-void ViewMovies(Movie movies[], int size)
+void ViewMovies(Movie* movies[], int size)
 {
     // enumerate movies until we run out
     for (int index = 0; index < size; ++index)
     {
-        if (movies[index].title == "")
-            return;
+       // if (movies[index].title == "")
+       // return;
+       if (movies[index])
         ViewMovie(movies[index]);
     };
        
@@ -194,22 +218,23 @@ void ViewMovies(Movie movies[], int size)
 }
 
 
-Movie AddMovie()
+Movie* AddMovie ()
 {
-    Movie movie;// = {0};
+   // Movie movie;// = {0};
+    Movie* movie = new Movie;
 
     //Get movie details
 
-    movie.title = ReadString("Enter movie title: ", true);
+    movie->title = ReadString("Enter movie title: ", true);
     std::cout << "Enter the run length (in minutes): ";
    
-    movie.runLength = ReadInt(0);
+    movie->runLength = ReadInt(0);
 
     std::cout << "Enter the release year (1900-2100): ";
-    std::cin >> movie.releaseYear;
-    movie.releaseYear = ReadInt(1900, 2100);
+    std::cin >> movie->releaseYear;
+    movie->releaseYear = ReadInt(1900, 2100);
 
-    movie.description = ReadString("Enter the optional description: ", false);
+    movie->description = ReadString("Enter the optional description: ", false);
 
 
     // Genres, up to 5
@@ -223,23 +248,59 @@ Movie AddMovie()
         else if (genre == " ")
             continue;
 
-        movie.genres = movie.genres + ", " + genre;
+        movie->genres = movie->genres + ", " + genre;
 
     }
-    movie.isClassic = Confirm("Is this a classic movie?");
+    movie->isClassic = Confirm("Is this a classic movie?");
     return movie;
 
 }
 
-void DeleteMovie()
+Movie* FindMovie(Movie* movies[], int size, int id)
 {
-    Movie movie;
-    if (!Confirm("Are you sure you want to delete" + movie.title + "?"))
+    for (int index = 0; index < size; ++index)
+    {
+        if (movies[index] && movies[index]->id == id)
+            return movies[index];
+    };
+
+    return nullptr;
+}
+
+
+void RemoveMovieFromArray(Movie* movies[], int size, Movie* movie)
+{
+    for (int index = 0; index < size; ++index)
+    {
+        if (movies[index] == movie)
+        {
+            movies[index] = nullptr;
+            delete movie;
+            return;
+        }
+    }
+}
+void DeleteMovie(Movie* movies[], int size)
+{
+    // get movie to delete
+    std::cout << "Enter the movie ID to delete: ";
+    int id = ReadInt(1);
+
+
+        // find the movie
+    Movie* movie = FindMovie(movies, size, id);
+        if (!movie)
+        {
+            DisplayWarning("Movie not found");
+            return;
+        };
+
+
+        if (!Confirm("Are you sure you want to delete" + movie->title + "?"))
         return;
 
-    // to to: Delete movie
-   // DisplayWarning("Not implemented yet");
-    movie.title = "";
+// delete movie
+        RemoveMovieFromArray(movies, size, movie);
 }
 
 void EditMovie()
@@ -324,14 +385,70 @@ void PointerDemo()
     // &(someFloats[1] = &(float) = float*
 }
 
+void EditMovie(Movie& movie)  // c++ with pass by ref, preferred
+{
+    movie.title = ReadString("Enter the new title: ", true);
+    std::cout << "Enter the new run length: ";
+    movie.runLength = ReadInt(0);
+}
+
+// switchinh from ref to pointers
+// 1. 
+void EditMovie(Movie& movie)  // c with pointers , only if needed
+{
+    if (movie == nullptr)
+        return;
+    //movie.title = ReadString("Enter the new title: ", true);
+    movie->itle = ReadString("Enter the new title: ", true);
+    std::cout << "Enter the new run length: ";
+    movie->runLength = ReadInt(0);
+}
+
+void ArrayAndPointerDemo()
+{
+    const int MaxSize = 100;
+
+    int numbers[MaxSize];
+
+    for (int index = 0; index < MaxSize; ++index)
+        numbers[index] = index + 1;
+
+    for (int index = 0; index < MaxSize; ++index)
+        std::cout << numbers[index] << std::endl;
+
+    // ARRAYS and pointers are interchangeable
+    int* pNumbers = numbers;
+    for (int index = 0; index < MaxSize; ++index)
+        pNumbers[index] = index + 1;   // can use array syntax with pointers and vice versa
+
+    // can enumerate without using array element operator
+    int* pElement = numbers;
+    for (int index = 0; index < MaxSize; ++index)
+        //std::cout << numbers[index] << std::endl
+        std::cout << *(pElement + index) << std::endl;
+
+    pElement = numbers;
+    for (int index = 0; index < MaxSize; ++index)
+        //std::cout << numbers[index] << std::endl
+        std::cout << *(pElement++) << std::endl;
+}
 
 int main()
 {
-    PointerDemo();
+    Movie movie;
+
+    //calling pass by references function
+   //EditMovieWithPassByReference(movie);
+    
+    // calling with pointer
+ //   EditMovieWithPointer(&movie);
+
+
+   // PointerDemo();
 
     //Cannot calculate the size of an array at runtime so use a const int variable
     const int MaximumMovies = 100;
-    Movie movies[MaximumMovies];
+    Movie* movies[MaximumMovies] = {0};
 
     //Display main menu
     bool done = false;
@@ -357,7 +474,7 @@ int main()
             case 'v': ViewMovies(movies, MaximumMovies); break;
 
             case 'D':
-            case 'd': DeleteMovie(); break;
+            case 'd': DeleteMovie(movies, MaximumMovies); break;
 
             case 'E':
             case 'e': EditMovie(); break;
