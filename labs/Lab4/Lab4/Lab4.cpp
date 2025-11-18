@@ -22,9 +22,9 @@ void InsertValues(int values[], int capacity, int& count);
 void DisplayProgramInfo()
 {
     cout << "Lab 4 " << endl;
-    cout << " Prizma Kunwar" << endl;
-    cout << "COSC 1436 - Fall 2025" << endl;
-    cout << "---------------------------------" << endl << endl;
+    cout << "Prizma Kunwar" << endl;
+    cout << "COSC 1436 - Fall 2025" << endl << endl;
+  
 }
 
 //Reads an integer value from the user that is >= minimum.
@@ -85,14 +85,14 @@ char DisplayMenu()
     cout << endl;
     cout << "Main Menu" << endl;
     cout << "----------------" << endl;
-    cout << "A) Add Values" << endl;
-    cout << "L) Largest" << endl;
-    cout << "S) Smallest" << endl;
+    cout << "A) dd" << endl;
+    cout << "L) argest" << endl;
     cout << "M) Mean" << endl;
-    cout << "U) Sum" << endl;
-    cout << "V) View" << endl;
-    cout << "Q) Quit" << endl;
-    cout << "Enter choice: ";
+    cout << "S) mallest" << endl;
+    cout << "I) nsert" << endl;
+    cout << "V) iew" << endl;
+    cout << "Q) uit" << endl;
+  
 
     char choice;
     cin >> choice;
@@ -259,5 +259,5 @@ int main()
         }
     }
 
-    return ;
+    return 0;
 }
