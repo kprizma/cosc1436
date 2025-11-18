@@ -144,7 +144,7 @@ std::string ReadString(std::string message, bool isRequired)
 
 
 void ViewMovie(Movie movie)
-{
+{    
     if (movie.title == "")
     {
         DisplayWarning("No movies exists");
@@ -160,6 +160,19 @@ void ViewMovie(Movie movie)
         std::cout << movie.description << std::endl;
     std::cout << std::endl;
 }
+void ViewMovies(Movie movies[], int size)
+{
+    // enumerate movies until we run out
+    for (int index = 0; index < size; ++index)
+    {
+        if (movies[index].title == "")
+            return;
+        ViewMovie(movies[index]);
+    };
+       
+   
+}
+
 
 Movie AddMovie()
 {
@@ -198,8 +211,9 @@ Movie AddMovie()
 
 }
 
-void DeleteMovie(Movie& movie)
+void DeleteMovie()
 {
+    Movie movie;
     if (!Confirm("Are you sure you want to delete" + movie.title + "?"))
         return;
 
@@ -208,10 +222,31 @@ void DeleteMovie(Movie& movie)
     movie.title = "";
 }
 
-void EditMovie(Movie& movie)
+void EditMovie()
 {
     DisplayWarning("Not Implemented yet");
 }
+
+
+
+int AddToMovieArray(Movie movies[], int size, Movie movie)
+{
+    // enumerate the array looking for the first blank movie
+    for (int index = 0; index < size; ++index)
+    {
+        if (movies[index].title == "")
+        {
+            // set the array element
+            movies[index] = movie;
+            return index;
+        }
+    }
+    DisplayError("No space available for new movie");
+    return -1;
+}
+
+
+
 void Display(int value)
 {
     std::cout << "int" << std::endl;
@@ -237,7 +272,7 @@ void Display(int, short)
 {
     std::cout << "int, short" << std::endl;
 }
-void Dispplay(short, int)
+void Display(short, int)
 {
     std::cout << "int, short" << std::endl;
 }
@@ -255,9 +290,101 @@ void Dispplay(short, int)
     Display((short)5, (short)10);
     
 }*/
+int Factorial(int value)
+{
+    if (value <= 1)
+        return 1;
+    return value * Factorial(value - 1);
+}
+void ArrayDemo()
+{
+    const int MaxNumbers = 100;
+    int numbers[MaxNumbers] = {0};
+
+   // int daysInMonth[12] = {31, 28, 31, 30, 31, 31, 30, 31, 30, 31};
+
+    int daysInMonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 31};
+
+    numbers[0] = 1;
+    numbers[1] = 2;
+    numbers[2] = 3;
+    
+    // approach 2 for any array
+    //for (int index = 0; index < MaxNumbers; ++index)
+       // numbers[index] = index + 1;
+
+    int rangeIndex = 0;
+    for (int number: numbers)
+        number = ++rangeIndex;
+
+    
+    for (int index = 0; index < MaxNumbers; ++index)
+        std::cout << numbers[index] << std::endl;
+
+    // prefix/ postfix and arrays
+    // ++x := x = x+1; ret x
+    // x++ := temp = x; x = x+1; ret temp
+    int outIndex = 0;
+    std::cout << ++numbers[outIndex] << std::endl;  /// modifies ++numbers[0], numbers[0] = 2, prints 2
+    std::cout << numbers[outIndex]++ << std::endl; /// modifies element, numbers[0]++, numbers[0] = 3, prints 2
+    std::cout << numbers[++outIndex] << std::endl; // modifies index, numbers[++0], outIndex = 1;
+                                                    // numbers[1], prints 2 
+    std::cout << numbers[outIndex++] << std::endl;   // modifies index, numbers  [1++] , outIndex = 2
+                                                    // numbers[1] , prints 2
+
+    // arrays
+    // access elememts
+    // can't
+    int numbers3[MaxNumbers] = {0};
+    bool areArraysEqual = numbers == numbers3;
+    std::cout << numbers;
+    //std::cin >> numbers;
+}
+
+void DisplayRow(int values[], int size)
+{
+    for (int row = 0; row < size; ++row)
+    {
+        // do stuff here
+        std::cout << values[row] << " ";
+    }
+
+}
+
+// all dimensional beyond first must be specified in parameter declaration
+void DisplayTable(int table[][31], int size)
+{
+    for (int row = 0; row < size; ++row)
+    {
+        DisplayRow(table[row], 31);
+        std::cout << std::endl;
+    }
+}
+
+
+void MultidimensionalArrayDemo()
+{
+    // months are the rows, days are columns
+    // int syntax is 1 row at a time
+    // int months [12] [31] = {1, 2, 3, 4, 5}
+    int months[12][31] = {
+                           {1, 2, 3, 4, 5 },        // row 1
+                           { 2, 4, 6, 8, 10 },        // row 2
+                         };
+
+    for (int row = 0; row < 12; ++row)
+        for (int col = 0; col < 31; ++col)
+        {
+            //do stuff here
+            months[row][col] = (row + 1) * (col + 1);
+        }
+    DisplayTable(months, 12);
+
+}
 
 int main()
 {
+    ArrayDemo();
     // cannot calculate the size of an array at runtime so use a const int variable
      const int  MaximumMovies = 100;
     
@@ -266,6 +393,7 @@ int main()
     
     Movie movie;
     Movie movies[MaximumMovies];
+    Movie firstElement = movies[0];
 
     //display main menu
     bool done = false;
@@ -274,7 +402,7 @@ int main()
         std::cout << "Movie Library" << std::endl;
         std::cout << "--------------" << std::endl;
         std::cout << "A)dd Movie" << std::endl;
-        std::cout << "V)iew Movies" << std::endl;
+        std::cout << "V)iew Movie" << std::endl;
         std::cout << "E)dit Movie" << std::endl;
         std::cout << "D)elete Movie" << std::endl;
         std::cout << "Q)uit" << std::endl;
@@ -287,16 +415,16 @@ int main()
         switch (choice)
         {
             case 'A':
-            case 'a':movie = AddMovie(); break;
+            case 'a': AddToMovieArray(movies, MaximumMovies, AddMovie()); break;
 
             case 'V':
-            case 'v': ViewMovie(movie); break;
+            case 'v': ViewMovies(movies, MaximumMovies); break;
 
             case 'D':
-            case 'd': DeleteMovie( movie); break;
+            case 'd': DeleteMovie(); break;
 
             case 'E':
-            case 'e': EditMovie(movie); break;
+            case 'e': EditMovie(); break;
 
             case 'Q':
             case 'q': done = true;
