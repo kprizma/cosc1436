@@ -73,7 +73,7 @@ bool Confirm ( std::string message)
 
 // <summary> displays an error message. </summary>
 // <param name = "message"> message to display. </param>
-void DisplayError(std::string message)
+void DisplayError(std::string const& message)
 {
     
   //  std::cout << "\033[91m"
@@ -132,7 +132,6 @@ std::string ReadString(std::string message, bool isRequired)
     }
     return input;
 }
-
 
 int AddToMovieArray(Movie* movies[], int size, Movie* movie)
 {
@@ -432,6 +431,60 @@ void ArrayAndPointerDemo()
         //std::cout << numbers[index] << std::endl
         std::cout << *(pElement++) << std::endl;
 }
+
+int* ResizeArray(int* array[], int oldSize, int newSize)
+{
+    if (newSize <= 0)
+    {
+        DisplayError("I don't think so");
+        return;
+    }
+   // int* pNewValue = new int;
+
+    // newSize > 0
+    int* pNewArray = new int[newSize];
+
+    // Init the array because we cannot use init syntax with new
+    for (int index = 0; index < newSize; ++index)
+        pNewArray[index] = 0;
+
+    // copy values from old to new array
+    oldSize = (oldSize < newSize) ? oldSize : newSize;
+    for (int index = 0; index < oldSize; ++index)
+        pNewArray[index] = array[index];
+    return pNewArray;
+}
+
+
+void DeleteArray(int* array[])
+{
+    // rules
+    // 1. you must delete the entire array using delete[]
+    // 2. array bettr have been allocated using new
+    //3. f delete array[] is called on a null ptr it will most likely crash
+    if (array)
+        delete[] array;
+    array = nullptr;
+}
+
+int youWillNeverDoThis = 100;
+int* ReturningAPointerDemo(int someValues, int values[])
+{
+    int* ptr = nullptr;
+
+    // valid case for returning a pointer
+    // 1. dynamically allocated memory using new
+    ptr = new int;
+    // 2. Elements of an array parameter
+    ptr = &values[0];
+    // 3.global variables
+    ptr = &youWillNeverDoThis;
+
+    //invalid cases
+    // 1. parameters (nullptr = &someValue)
+    // 2. local variables (int localVar; ptr= &localVar;)
+}
+
 
 int main()
 {
