@@ -40,12 +40,14 @@ int ReadInt(string message, int minimum)
         if (cin.fail())
         {
             cin.clear();
-            cin.ignore(200, '\n');
+            cin.ignore(200);
             cout << "ERROR: Invalid number." << endl;
-        } else if (value < minimum)
+        } 
+        else if (value < minimum)
         {
             cout << "ERROR: Value must be >= " << minimum << endl;
-        } else
+        } 
+        else
         {
             return value;
         }
@@ -62,16 +64,10 @@ int LoadInitialValues(int values[], int capacity)
 
     while (count < capacity)
     {
-        int value = ReadInt("Enter a value: ", -1000000);
+        int value = ReadInt("Enter a value: ", 0);
 
         if (value == 0)
             break;
-
-        if (value < 0)
-        {
-            cout << "You must enter a value >= 0" << endl;
-            continue;
-        }
 
         values[count++] = value;
     }
@@ -85,14 +81,13 @@ char DisplayMenu()
     cout << endl;
     cout << "Main Menu" << endl;
     cout << "----------------" << endl;
-    cout << "A) dd" << endl;
-    cout << "L) argest" << endl;
+    cout << "L) Largest" << endl;
+    cout << "S) Smallest" << endl;
+    cout << "U) Sum" << endl;
     cout << "M) Mean" << endl;
-    cout << "S) mallest" << endl;
-    cout << "I) nsert" << endl;
-    cout << "V) iew" << endl;
-    cout << "Q) uit" << endl;
-  
+    cout << "I) Insert" << endl;
+    cout << "V) View" << endl;
+    cout << "Q) Quit" << endl;
 
     char choice;
     cin >> choice;
@@ -181,16 +176,10 @@ void InsertValues(int values[], int capacity, int& count)
 
     while (count < capacity)
     {
-        int value = ReadInt("Enter a value: ", -1000000);
+        int value = ReadInt("Enter a value: ", 0);
 
         if (value == 0)
             return;
-
-        if (value < 0)
-        {
-            cout << "ERROR: Must be >= 0" << endl;
-            continue;
-        }
 
         values[count++] = value;
     }
@@ -218,7 +207,7 @@ int main()
 
         switch (choice)
         {
-            case 'A': InsertValues(values, MaxValues, count); break;
+            case 'I': InsertValues(values, MaxValues, count); break;
 
             case 'L':
                 if (count == 0)
