@@ -103,7 +103,7 @@ int ReadInt( int minimumValue, int maximumValue)
         if (value >= minimumValue && value <= maximumValue)
             return value;
 
-        DisplayError("Value too small");
+        DisplayError("Value is outside range");
 
 
     } while (true);
