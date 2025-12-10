@@ -45,7 +45,7 @@ int ReadInt(string message, int minimum)
         } 
         else if (value < minimum)
         {
-            cout << "ERROR: Value must be >= " << minimum << endl;
+            cout << "You must enter a value greater than or equal to 0" << minimum << endl;
         } 
         else
         {
