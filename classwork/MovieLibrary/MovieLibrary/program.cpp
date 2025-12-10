@@ -5,6 +5,8 @@
 #include <iostream>
 #include <string>
 #include <iomanip>
+#include <fstream>  // file IO
+#include <sstream> // stringstream
   
 // movie details
 struct Movie
@@ -103,7 +105,7 @@ int ReadInt( int minimumValue, int maximumValue)
         if (value >= minimumValue && value <= maximumValue)
             return value;
 
-        DisplayError("Value too small");
+        DisplayError("Value is outside range");
 
 
     } while (true);
@@ -119,6 +121,9 @@ std::string ReadString(std::string message, bool isRequired)
 {
     
     std::cout << message;
+
+    if (std::cin.peek())
+        std::cin.ignore();
 
     std::string input;
     std::getline(std::cin, input);
@@ -485,23 +490,86 @@ int* ReturningAPointerDemo(int someValues, int values[])
     // 2. local variables (int localVar; ptr= &localVar;)
 }
 
+void LoadMovies(Movie* movies[], int size)
+{
+    // TODO; IMPLEMENT THIS
+}
+
+std::string QuoteString(std::string const& value)
+{
+    std::stringstream str;
+
+    // if no startng double quote, then add double quote
+    if (value.length()  == 0 || value[0] != '"')
+        str << '"';
+    str << value;
+
+    // if no ending double quote, then add double quote
+    if (value.length() == 0 || value[value.length() - 1] != '"')
+        str << '"';
+
+    return str.str();
+}
+
+void SaveMovie(std::ofstream& file, Movie* pMovie)
+{
+    if (!pMovie)
+        return;
+
+    // id, title, release year, run legth, isclassic, genres, description
+    file << pMovie->id
+        << " ," << QuoteString (pMovie->title)
+        << " ," << pMovie->releaseYear
+        << " ," << pMovie->runLength
+        << " ," << (pMovie->isClassic ? 1:0)
+        << " ," << QuoteString(pMovie->genres)
+        << " ," << QuoteString(pMovie->description)
+        << std::endl;
+
+}
+
+
+void SaveMovies(const char* filename, Movie* movies[], int size)
+{
+    std::fstream fs;     // it can read and write
+    std::ifstream ifs;    //  it stands input file stream.   it can only read  (cin)
+    std::ofstream ofs;      // it can only write(cout)
+
+    std::ofstream file;
+
+    // to use a file, must open it
+    // flags (bitwise or together)
+    // in | out - access mode
+    // binary - text or binary
+    // app | ate | trunc - write mode
+    // app - append(always)
+    // ate - append ( by default)
+    // trunc - replace
+    file.open(filename, std::ios::out | std::ios::trunc);
+    if (file.fail())
+    {
+        DisplayError("Unable to save movies");
+        return;
+    };
+
+    //file << "Writing to the file";
+    for (int index = 0; index < size; ++index)
+        SaveMovie(file, movies[index]);
+}
+
+
+
 
 int main()
 {
-    Movie movie;
+    const char* FileName = "movies.csv";
 
-    //calling pass by references function
-   //EditMovieWithPassByReference(movie);
-    
-    // calling with pointer
- //   EditMovieWithPointer(&movie);
-
-
-   // PointerDemo();
 
     //Cannot calculate the size of an array at runtime so use a const int variable
     const int MaximumMovies = 100;
     Movie* movies[MaximumMovies] = {0};
+
+    LoadMovies(movies, MaximumMovies);
 
     //Display main menu
     bool done = false;
@@ -533,7 +601,7 @@ int main()
             case 'e': EditMovie(); break;
 
             case 'Q':
-            case 'q': done = true;
+            case 'q': SaveMovies(FileName, movies, MaximumMovies); done = true;
 
             default: DisplayError("Invalid choice"); break;
         };
