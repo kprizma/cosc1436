@@ -20,6 +20,11 @@ struct Movie
     std::string genres;         //Optional (comma separated list of genres)
 };
 
+//discuss
+void ClearInputBuffer()
+{
+    std::cin.ignore(INT32_MAX, '\n');
+}
 
 enum class ForegroundColor {
     Black = 30,
@@ -33,22 +38,27 @@ enum class ForegroundColor {
     BrightCyan = 96
 };
 
-// function prototypes
-// forward declarations/ referencing
-void DisplayError(std::string);
-
 
 void ResetTextColor()
 {
     std::cout << "\033[0m";
 }
 
-
-
-void SetTextColor (ForegroundColor color)
+void SetTextColor(ForegroundColor color)
 {
     std::cout << "\033[" << (int)color << "m";
 }
+
+// function prototypes
+// forward declarations/ referencing
+void DisplayError(std::string const& message);
+{
+    //std::cout << "\033[91m" 
+    SetTextColor(ForegroundColor::BrightRed);
+    std::cout << "ERROR: " << message << std::endl;
+    ResetTextColor();
+}
+
 
 bool Confirm ( std::string message)
     {
@@ -73,16 +83,8 @@ bool Confirm ( std::string message)
     }
  }
 
-// <summary> displays an error message. </summary>
-// <param name = "message"> message to display. </param>
-void DisplayError(std::string const& message)
-{
-    
-  //  std::cout << "\033[91m"
-    SetTextColor(ForegroundColor::BrightRed);
-    std::cout << "Error: " << message << std::endl;
-    ResetTextColor();
-}
+
+
 // <summary> displays an error message. </summary>
 // <param name = "message"> message to display. </param>
 void DisplayWarning(std::string message)
@@ -111,24 +113,21 @@ int ReadInt( int minimumValue, int maximumValue)
     } while (true);
 }
 
-int ReadInt(int minimumValue)
+int ReadInt(int minimumValue);
 {
     return ReadInt(minimumValue, INT_MAX);
 
 }
 
-std::string ReadString(std::string message, bool isRequired)
+std::string ReadString (std::string message, bool isRequired)
 {
     
     std::cout << message;
 
-    if (std::cin.peek())
-        std::cin.ignore();
-
     std::string input;
     std::getline(std::cin, input);
 
-    
+
     while (isRequired && input == "")
     {
         DisplayError(" Value is required ");
@@ -252,9 +251,13 @@ Movie* AddMovie ()
         else if (genre == " ")
             continue;
 
+        // fix issue with havin no genres to begin with
+        if (movie->genres.length() = )
         movie->genres = movie->genres + ", " + genre;
 
     }
+
+
     movie->isClassic = Confirm("Is this a classic movie?");
     return movie;
 
@@ -490,9 +493,37 @@ int* ReturningAPointerDemo(int someValues, int values[])
     // 2. local variables (int localVar; ptr= &localVar;)
 }
 
-void LoadMovies(Movie* movies[], int size)
+Movie* LoadMovie(std::string const& line)
 {
-    // TODO; IMPLEMENT THIS
+    if (line == "")
+        return nullptr;
+    std::string* fields[7];
+    std::string* fields = ParseFields(line, fields, 7);
+
+}
+
+void LoadMovies(const char* filename, Movie* movies[], int size)
+{
+    std::ifstream file;
+    file.open(filename, std::ios::in);
+    if (file.fail())
+        return;
+
+    // read each line
+    for (int index = 0; index < size; ++index)
+    {
+        std::string line;
+        std::getline(file, line);
+
+        Movie* pMovie = LoadMovie(line);
+        if (pMovie)
+            movies[index] = pMovie;
+
+    }
+
+    std::string line;
+    std::getline(file, line);
+    //file.getline();
 }
 
 std::string QuoteString(std::string const& value)
@@ -516,24 +547,24 @@ void SaveMovie(std::ofstream& file, Movie* pMovie)
     if (!pMovie)
         return;
 
-    // id, title, release year, run legth, isclassic, genres, description
+    // Id, title, release year, run length, isClassic, genres, description
     file << pMovie->id
-        << " ," << QuoteString (pMovie->title)
-        << " ," << pMovie->releaseYear
-        << " ," << pMovie->runLength
-        << " ," << (pMovie->isClassic ? 1:0)
-        << " ," << QuoteString(pMovie->genres)
-        << " ," << QuoteString(pMovie->description)
+        << ", " << QuoteString(pMovie->title)
+        << ", " << pMovie->releaseYear
+        << ", " << pMovie->runLength
+        << ", " << (pMovie->isClassic ? 1 : 0)
+        << ", " << QuoteString(pMovie->genres)
+        << ", " << QuoteString(pMovie->description)
         << std::endl;
-
 }
+
 
 
 void SaveMovies(const char* filename, Movie* movies[], int size)
 {
-    std::fstream fs;     // it can read and write
-    std::ifstream ifs;    //  it stands input file stream.   it can only read  (cin)
-    std::ofstream ofs;      // it can only write(cout)
+    //std::fstream fs;     // it can read and write
+    //std::ifstream ifs;    //  it stands input file stream.   it can only read  (cin)
+    //std::ofstream ofs;      // it can only write(cout)
 
     std::ofstream file;
 
@@ -585,6 +616,7 @@ int main()
 
         char choice;
         std::cin >> choice;
+        ClearInputBuffer();
 
         switch (choice)
         {
@@ -601,7 +633,7 @@ int main()
             case 'e': EditMovie(); break;
 
             case 'Q':
-            case 'q': SaveMovies(FileName, movies, MaximumMovies); done = true;
+            case 'q': SaveMovies(FileName, movies, MaximumMovies); done = true; break;
 
             default: DisplayError("Invalid choice"); break;
         };
