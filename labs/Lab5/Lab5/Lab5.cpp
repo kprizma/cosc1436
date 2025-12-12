@@ -2,8 +2,11 @@
 // Prizma Kunwar
 // COSC 1436 - Fall 2025
 
+
+
 #include <iostream>
-#include <iomanip>
+#include <cctype>
+#include <cstring>
 using namespace std;
 
 void ShowProgramInformation()
@@ -12,79 +15,6 @@ void ShowProgramInformation()
         std::cout << "Prizma Kunwar" << std::endl;
         std::cout << "COSC 1436 - Fall 2025" << std::endl << std::endl;
 }
-
-// structure to represent stop
-struct stop
-{
-    int x;
-    int y;
-};
-
-//function to display the main menu. 
-void DisplayMenu() 
-{
-    cout << "Main Menu" << endl;
-    cout << "A - Option A" << endl;
-    cout << "B - Option B" << endl;
-    cout << "C - Option C" << endl;
-    cout << "Q - Quit" << endl;
-}
-
-int main() 
-{
-    char choice;
-    char confirm;
-
-    do 
-    {
-        DisplayMenu();
-        cout << "Enter your choice: ";
-        cin >> choice;
-
-        if (choice == 'A' || choice == 'a')
-        {
-            cout << "You selected Option A" << endl;
-        } 
-        else if (choice == 'B' || choice == 'b') 
-        {
-            cout << "You selected Option B" << endl;
-        }
-        else if (choice == 'C' || choice == 'c') 
-        {
-            cout << "You selected Option C" << endl;
-        } 
-        else if (choice == 'Q' || choice == 'q')
-        {
-            cout << "Are you sure you want to quit? (Y/N): ";
-            cin >> confirm;
-            if (confirm == 'Y' || confirm == 'y')
-            {
-                break;
-            }
-        } 
-        else
-        {
-            cout << "Invalid selection. Please try again" << endl;
-        }
-    }
-    while (true);
-
-    cout << "Program terminated" << endl;
-    return 0;
-}
-
-
-
-
-
-
-
-
-#include <iostream>
-#include <cctype>
-#include <cstring>
-
-using namespace std;
 
 const int MaximumStops = 100;
 const int StringSize = 100;
@@ -95,8 +25,8 @@ const int StringSize = 100;
 */
 void ClearInputBuffer()
 {
-    cin.clear();
-    cin.ignore(1000, '\n');
+    std::cin.clear();
+    std::cin.ignore(1000);
 }
 
 /*
@@ -107,12 +37,12 @@ void ClearInputBuffer()
 int ReadInt(const char prompt[])
 {
     int value;
-    cout << prompt;
+    std::cout << prompt;
 
     while (!(cin >> value))
     {
         ClearInputBuffer();
-        cout << "Invalid input. Please enter an integer: ";
+        std::cout << "Invalid input. Please enter an integer: ";
     }
 
     ClearInputBuffer();
@@ -125,13 +55,13 @@ int ReadInt(const char prompt[])
 */
 void ReadString(const char prompt[], char outString[], int size)
 {
-    cout << prompt;
-    cin.getline(outString, size);
+    std::cout << prompt;
+    std::cin.getline(outString, size);
 
     while (strlen(outString) == 0)
     {
-        cout << "Invalid input. Please try again: ";
-        cin.getline(outString, size);
+        std::cout << "Invalid input. Please try again: ";
+        std::cin.getline(outString, size);
     }
 }
 
@@ -153,16 +83,16 @@ bool Confirm(const char prompt[])
 {
     char choice;
 
-    cout << prompt;
-    cin >> choice;
+    std::cout << prompt;
+    std::cin >> choice;
     ClearInputBuffer();
 
     choice = ToUpper(choice);
 
     while (choice != 'Y' && choice != 'N')
     {
-        cout << "Invalid response. Enter Y or N: ";
-        cin >> choice;
+        std::cout << "Invalid response. Enter Y or N: ";
+        std::cin >> choice;
         ClearInputBuffer();
         choice = ToUpper(choice);
     }
@@ -170,7 +100,7 @@ bool Confirm(const char prompt[])
     return choice == 'Y';
 }
 
-/************** DATA STRUCTURES ****************/
+/*DATA STRUCTURES */
 
 struct Point
 {
@@ -183,7 +113,7 @@ struct Stop
     Point* location;
 };
 
-/************** FUNCTION PROTOTYPES **************/
+/* FUNCTION PROTOTYPES*/
 
 void AddStop(Stop* trip[], int size, int& count);
 void ViewBeginning(Stop* trip[], int count);
@@ -192,7 +122,6 @@ void ViewEnd(Stop* trip[], int count);
 void RemoveStop(Stop* trip[], int& count);
 void ClearTrip(Stop* trip[], int& count);
 
-/************************************************/
 
 /*
     Function: AddStop
@@ -202,11 +131,11 @@ void AddStop(Stop* trip[], int size, int& count)
 {
     if (count >= size)
     {
-        cout << "Trip is full. Cannot add more stops.\n";
+        std::cout << "Trip is full. Cannot add more stops." << std::endl;
         return;
     }
 
-    cout << "Adding new stop...\n";
+    std::cout << "Adding new stop.."  << std::endl;
 
     int x = ReadInt("Enter X coordinate: ");
     int y = ReadInt("Enter Y coordinate: ");
@@ -220,7 +149,7 @@ void AddStop(Stop* trip[], int size, int& count)
     trip[count] = newStop;
     count++;
 
-    cout << "Stop added!\n";
+    std::cout << "Stop added" << std::endl;
 }
 
 /*
@@ -231,11 +160,11 @@ void ViewBeginning(Stop* trip[], int count)
 {
     if (count == 0)
     {
-        cout << "No stops available.\n";
+        std::cout << "No stops available."  << std::endl;
         return;
     }
 
-    cout << "Beginning Stop:\n";
+    std::cout << "Beginning Stop:" << std
     cout << "Stop 1: ("
         << trip[0]->location->x << ", "
         << trip[0]->location->y << ")\n";
@@ -332,7 +261,7 @@ void ClearTrip(Stop* trip[], int& count)
     cout << "Trip cleared.\n";
 }
 
-/********************** MAIN ************************/
+/*MAIN*/
 
 int main()
 {
