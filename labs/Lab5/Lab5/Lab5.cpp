@@ -164,10 +164,10 @@ void ViewBeginning(Stop* trip[], int count)
         return;
     }
 
-    std::cout << "Beginning Stop:" << std
-    cout << "Stop 1: ("
+    std::cout << "Beginning Stop:" << std::endl;
+    std::cout << "Stop 1: ( "
         << trip[0]->location->x << ", "
-        << trip[0]->location->y << ")\n";
+        << trip[0]->location->y << ")" << std::endl;
 }
 
 /*
@@ -178,16 +178,16 @@ void ViewMiddle(Stop* trip[], int count)
 {
     if (count == 0)
     {
-        cout << "No stops available.\n";
+        std::cout << "No stops available." << std::endl;
         return;
     }
 
     int mid = count / 2;
 
-    cout << "Middle Stop:\n";
-    cout << "Stop " << (mid + 1) << ": ("
+    std::cout << "Middle Stop:" << std::endl;
+    std::cout << "Stop " << (mid + 1) << ": ("
         << trip[mid]->location->x << ", "
-        << trip[mid]->location->y << ")\n";
+        << trip[mid]->location->y << ")" << std::endl;
 }
 
 /*
@@ -198,14 +198,14 @@ void ViewEnd(Stop* trip[], int count)
 {
     if (count == 0)
     {
-        cout << "No stops available.\n";
+        std::cout << "No stops available." << std::endl;
         return;
     }
 
-    cout << "End Stop:\n";
-    cout << "Stop " << count << ": ("
+    std::cout << "End Stop:" << std::endl;
+    std::cout << "Stop " << count << ": ("
         << trip[count - 1]->location->x << ", "
-        << trip[count - 1]->location->y << ")\n";
+        << trip[count - 1]->location->y << ")" << std::endl;
 }
 
 /*
@@ -216,16 +216,16 @@ void RemoveStop(Stop* trip[], int& count)
 {
     if (count == 0)
     {
-        cout << "No stops to remove.\n";
+        std::cout << "No stops to remove." << std::endl;
         return;
     }
 
     int index = ReadInt("Enter stop number to remove: ");
-    index--;  // convert to zero-based
+    index;
 
     if (index < 0 || index >= count)
     {
-        cout << "Invalid stop number.\n";
+        std::cout << "Invalid stop number." << std::endl;
         return;
     }
 
@@ -235,9 +235,9 @@ void RemoveStop(Stop* trip[], int& count)
     for (int i = index; i < count - 1; i++)
         trip[i] = trip[i + 1];
 
-    count--;
+    count;
 
-    cout << "Stop removed.\n";
+    std::cout << "Stop removed." << std::endl;
 }
 
 /*
@@ -258,7 +258,7 @@ void ClearTrip(Stop* trip[], int& count)
 
     count = 0;
 
-    cout << "Trip cleared.\n";
+    std::cout << "Trip cleared." << std::endl;
 }
 
 /*MAIN*/
@@ -269,21 +269,21 @@ int main()
     int stopCount = 0;
     char choice;
 
-    cout << "Welcome to Trip Manager!\n";
+    std::cout << "Welcome to Trip Manager" << std::endl;
 
     do
     {
-        cout << "\nMenu:\n";
-        cout << "A - Add Stop\n";
-        cout << "B - View Beginning Stop\n";
-        cout << "M - View Middle Stop\n";
-        cout << "E - View End Stop\n";
-        cout << "R - Remove Stop\n";
-        cout << "C - Clear Trip\n";
-        cout << "Q - Quit\n";
-        cout << "Enter choice: ";
+        std::cout << std::endl << "Menu: " << std::endl;
+        std::cout << "A - Add Stop" << std::endl;
+        std::cout << "B - View Beginning Stop" << std::endl;
+        std::cout << "M - View Middle Stop" << std::endl;
+        std::cout << "E - View End Stop" << std::endl;
+        std::cout << "R - Remove Stop" << std::endl;
+        std::cout << "C - Clear Trip" << std::endl;
+        std::cout << "Q - Quit" << std::endl;
+        std::cout << "Enter choice: ";
 
-        cin >> choice;
+        std::cin >> choice;
         ClearInputBuffer();
         choice = ToUpper(choice);
 
@@ -298,13 +298,13 @@ int main()
             case 'Q': break;
 
             default:
-                cout << "Invalid selection.\n";
+                std::cout << "Invalid selection." << std::endl;
         }
 
     } while (choice != 'Q');
 
-    ClearTrip(trip, stopCount); // ensure cleanup
+    ClearTrip(trip, stopCount);
 
-    cout << "\nGoodbye!\n";
+    cout << std::endl << "Goodbye" << std::endl;
     return 0;
 }
