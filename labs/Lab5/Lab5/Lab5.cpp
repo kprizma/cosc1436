@@ -17,18 +17,19 @@ void ShowProgramInformation()
 
 const int MaximumStops = 100;
 
+
 /* Clear input buffer */
 void ClearInputBuffer()
 {
-    cin.clear();
-    cin.ignore(100);
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
 /* Read an integer with validation */
 int ReadInt(const char prompt[], int min = -100, int max = 100)
 {
     int value;
-    cout << prompt;
+    std::cout << prompt;
     while (!(cin >> value) || value < min || value > max)
     {
         ClearInputBuffer();
@@ -79,10 +80,14 @@ struct Stop
 
 /* FUNCTION PROTOTYPES */
 void AddStop(Stop* trip[], int size, int& count);
+void ViewBeginning(Stop* trip[], int count);
+void ViewMiddle(Stop* trip[], int count);
+void ViewEnd(Stop* trip[], int count);
 void RemoveStop(Stop* trip[], int& count);
 void ClearTrip(Stop* trip[], int& count);
-double CalculateDistance(Point* a, Point* b);
-void ViewTrip(Stop* trip[], int count, int speed);
+double CalculateDistance(Point* p1, Point* p2);
+
+
 
 /* Add a stop */
 void AddStop(Stop* trip[], int size, int& count)
@@ -94,8 +99,8 @@ void AddStop(Stop* trip[], int size, int& count)
     }
 
     std::cout << "Adding new stop..." << std::endl;
-    int x = ReadInt("Enter X coordinate (-100 to 100): ", -100, 100);
-    int y = ReadInt("Enter Y coordinate (-100 to 100): ", -100, 100);
+    int x = ReadInt("Enter X coordinate (-100 to 100): ");
+    int y = ReadInt("Enter Y coordinate (-100 to 100): ");
 
     Stop* newStop = new Stop;
     newStop->location = new Point;
@@ -109,6 +114,62 @@ void AddStop(Stop* trip[], int size, int& count)
 }
 
 /* Remove a stop */
+void ViewBeginning(Stop* trip[], int count)
+{
+    if (count == 0)
+    {
+        cout << "No stops available." << std::endl;
+        return;
+    }
+
+    std::cout << "Beginning Stop:" << std::endl;
+    std::cout << "Stop 1: ("
+        << trip[0]->location->x << ", "
+        << trip[0]->location->y << ")" << std::endl;
+}
+
+/*
+    Function: ViewMiddle
+    Purpose: Displays the middle stop in the trip.
+*/
+void ViewMiddle(Stop* trip[], int count)
+{
+    if (count == 0)
+    {
+        std::cout << "No stops available." << std::endl;
+        return;
+    }
+
+    int mid = count / 2;
+
+    std::cout << "Middle Stop:" << std::endl;
+    std::cout << "Stop " << (mid + 1) << ": ("
+        << trip[mid]->location->x << ", "
+        << trip[mid]->location->y << ")" << std::endl;
+}
+
+/*
+    Function: ViewEnd
+    Purpose: Displays the last stop in the trip.
+*/
+void ViewEnd(Stop* trip[], int count)
+{
+    if (count == 0)
+    {
+        std::cout << "No stops available." << std::endl;
+        return;
+    }
+
+    std::cout << "End Stop:" << std::endl;
+    std::cout << "Stop " << count << ": ("
+        << trip[count - 1]->location->x << ", "
+        << trip[count - 1]->location->y << ")" << std::endl;
+}
+
+/*
+    Function: RemoveStop
+    Purpose: Removes a stop from the trip.
+*/
 void RemoveStop(Stop* trip[], int& count)
 {
     if (count == 0)
@@ -117,8 +178,13 @@ void RemoveStop(Stop* trip[], int& count)
         return;
     }
 
-    int stopNum = ReadInt("Enter stop number to remove: ", 1, count);
-    int index = stopNum - 1;
+    int index = ReadInt("Enter stop number to remove: ") - 1;
+
+    if (index < 0 || index >= count)
+    {
+        std::cout << "Invalid stop number." << std::endl;
+        return;
+    }
 
     delete trip[index]->location;
     delete trip[index];
@@ -126,13 +192,16 @@ void RemoveStop(Stop* trip[], int& count)
     for (int i = index; i < count - 1; i++)
         trip[i] = trip[i + 1];
 
-    trip[count - 1] = nullptr;
-    count;
+    trip[count - 1] = nullptr; // Clear last element
+    count--;
 
     std::cout << "Stop removed." << std::endl;
 }
 
-/* Clear all stops */
+/*
+    Function: ClearTrip
+    Purpose: Deletes all stops and resets the count.
+*/
 void ClearTrip(Stop* trip[], int& count)
 {
     if (!Confirm("Are you sure you want to clear the trip? (Y/N): "))
@@ -144,20 +213,23 @@ void ClearTrip(Stop* trip[], int& count)
         delete trip[i];
         trip[i] = nullptr;
     }
+
     count = 0;
+
     std::cout << "Trip cleared." << std::endl;
 }
 
-/* Calculate distance between two points */
-double CalculateDistance(Point* a, Point* b)
+/*
+    Function: CalculateDistance
+    Purpose: Calculates distance between two points.
+*/
+double CalculateDistance(Point* p1, Point* p2)
 {
-    double dx = static_cast<double>(b->x - a->x);
-    double dy = static_cast<double>(b->y - a->y);
-    return sqrt(dx * dx + dy * dy);
+    return sqrt(pow(p2->x - p1->x, 2) + pow(p2->y - p1->y, 2));
 }
 
-/* View all stops with distance and travel time */
-void ViewTrip(Stop* trip[], int count, int speed)
+/* Display all stops with distance and travel time */
+void DisplayTripDetails(Stop* trip[], int count, int speed)
 {
     if (count == 0)
     {
@@ -166,50 +238,59 @@ void ViewTrip(Stop* trip[], int count, int speed)
     }
 
     std::cout << fixed << setprecision(2);
-    std::cout << std::endl << "Stop          Location          Distance (miles)          Time (minutes)" << std::endl;
-    std::cout <<              "-------------------------------------------------------------------------" << std::endl;
+    std::cout << "Stop       Location       Distance (miles)       Time (minutes)" << std::endl;
+    std::cout << "----------------------------------------------------------------" << std::endl;
 
-    Point startPoint = {0, 0};
-    double totalDistance = 0;
-    double totalTime = 0;
+    double totalDistance = 0.0;
+    double travelTime = 0.0;
+
+    Point startPoint = {0, 0}; // starting point (0,0)
 
     for (int i = 0; i < count; i++)
     {
-        double dist = CalculateDistance(&startPoint, trip[i]->location);
-        double time = ceil((dist / speed) * 60);
+        double distance = CalculateDistance(&startPoint, trip[i]->location);
+        double timeMinutes = ceil((distance / speed) * 60); // convert hours to minutes and round up
 
-        std::cout << setw(2) << (i + 1) << " ("
-            << trip[i]->location->x << ","
-            << trip[i]->location->y << ")"
-            << setw(10) << dist << " "
-            << setw(13) << time << std::endl;
+        std::cout << (i + 1) << " (" << trip[i]->location->x << "," << trip[i]->location->y << ")  "
+            << distance << "   " << timeMinutes << std::endl;
 
-        totalDistance += dist;
-        totalTime += time;
-        startPoint = *trip[i]->location;
+        totalDistance += distance;
+        travelTime += timeMinutes;
+
+        startPoint = *trip[i]->location; // next start is current stop
     }
 
-    cout << "-------------------------------------------------------------" << endl;
-    cout << "Total     " << setw(10) << totalDistance << "     " << setw(13) << totalTime << endl;
+    std::cout << "------------------------------------------------------------" << std::endl;
+    std::cout << "Total     " << totalDistance << "    " << travelTime << std::endl;
 }
 
-/* MAIN */
+/*MAIN*/
+
 int main()
 {
     Stop* trip[MaximumStops] = {nullptr};
     int stopCount = 0;
     char choice;
+    int speed = 0;
 
     ShowProgramInformation();
 
-    // Prompt for speed
-    int speed = ReadInt("Enter your travel speed (1-60 mph): ", 1, 60);
+    // Prompt for travel speed
+    do
+    {
+        speed = ReadInt("Enter your travel speed (1-60 mph): ");
+        if (speed < 1 || speed > 60)
+            std::cout << "Invalid speed. Please enter a value between 1 and 60." << std::endl;
+    } while (speed < 1 || speed > 60);
 
     do
     {
         std::cout << std::endl << "Menu: " << std::endl;
         std::cout << "A - Add Stop" << std::endl;
-        std::cout << "V - View Trip" << std::endl;
+        std::cout << "B - View Beginning Stop" << std::endl;
+        std::cout << "M - View Middle Stop" << std::endl;
+        std::cout << "E - View End Stop" << std::endl;
+        std::cout << "D - Display Trip Details" << std::endl; 
         std::cout << "R - Remove Stop" << std::endl;
         std::cout << "C - Clear Trip" << std::endl;
         std::cout << "Q - Quit" << std::endl;
@@ -222,19 +303,22 @@ int main()
         switch (choice)
         {
             case 'A': AddStop(trip, MaximumStops, stopCount); break;
-            case 'V': ViewTrip(trip, stopCount, speed); break;
+            case 'B': ViewBeginning(trip, stopCount); break;
+            case 'M': ViewMiddle(trip, stopCount); break;
+            case 'E': ViewEnd(trip, stopCount); break;
+            case 'D': DisplayTripDetails(trip, stopCount, speed); break; 
             case 'R': RemoveStop(trip, stopCount); break;
             case 'C': ClearTrip(trip, stopCount); break;
             case 'Q':
                 if (Confirm("Are you sure you want to quit? (Y/N): "))
                 {
                     ClearTrip(trip, stopCount);
-                    std::cout << "Goodbye!" << endl;
+                    cout << std::endl << "Goodbye!" << std::endl;
                     return 0;
                 }
                 break;
             default:
-                std::cout << "Invalid selection." << endl;
+               std::cout << "Invalid selection." << std::endl;
         }
 
     } while (true);
