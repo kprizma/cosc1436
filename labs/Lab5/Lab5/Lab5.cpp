@@ -16,7 +16,6 @@ struct Stop
 };
 
 // Utility Functions 
-
 void DisplayError(std::string message)
 {
     std::cout << "ERROR: " << message << std::endl;
